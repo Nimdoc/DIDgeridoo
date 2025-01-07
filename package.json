@@ -1,0 +1,19 @@
+{
+  "name": "didgeridoo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/assets/js/script.js",
+  "scripts": {
+    "build": "wp-scripts build src/assets/js/script.js --output-path=build",
+    "start": "wp-scripts start src/assets/js/script.js --output-path=build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "EPL-2.0",
+  "devDependencies": {
+    "@wordpress/scripts": "^30.7.0"
+  },
+  "dependencies": {
+    "sass": "^1.83.0"
+  }
+}
