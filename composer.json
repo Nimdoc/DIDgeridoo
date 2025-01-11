@@ -3,7 +3,11 @@
     "description": "A simple starter plugin for WordPress.",
     "type": "wordpress-plugin",
     "license": "EPL-2.0",
-    "require": {},
+    "require": {
+        "illuminate/validation": "^11.37",
+        "illuminate/translation": "^11.37",
+        "illuminate/container": "^11.37"
+    },
     "autoload": {
         "psr-4": {
             "Didgeridoo\\": "src/"

@@ -20,13 +20,7 @@ const App = () => {
       setSiteDomain(data["site_domain"]);
 
       // deserialize the didSettings
-      const didSettingsObject = JSON.parse(data["didgeridoo_did_list"]);
-      const didSettingsList = [];
-      for (const [key, value] of Object.entries(didSettingsObject)) {
-        didSettingsList.push({ name: key, did: value });
-      }
-      console.log(didSettingsObject);
-      console.log(didSettingsList);
+      const didSettingsList = JSON.parse(data["didgeridoo_did_list"]);
       setDidSettings(didSettingsList);
     });
   });
@@ -141,14 +135,8 @@ const App = () => {
           <button
             className="button button-primary"
             onClick={() => {
-              // convert didSettings from array to key value pair
-              let didSettingsObject = {};
-              didSettings.forEach((setting) => {
-                didSettingsObject[setting["name"]] = setting["did"];
-              });
-
               // json serialize the didSettings
-              const didSettingsJson = JSON.stringify(didSettingsObject);
+              const didSettingsJson = JSON.stringify(didSettings);
               console.log(didSettingsJson);
 
               wp.apiFetch({

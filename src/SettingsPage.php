@@ -2,6 +2,10 @@
 
 namespace Didgeridoo;
 
+use Illuminate\Validation\Factory as ValidatorFactory;
+use Illuminate\Translation\Translator;
+use Illuminate\Container\Container;
+
 class SettingsPage
 {
     public function __construct()
@@ -130,6 +134,44 @@ class SettingsPage
                 'Sorry, you are not allowed to update the DAEXT UI Test options.',
                 ['status' => 403]
             );
+        }
+
+        $translator = new Translator(new \Illuminate\Translation\ArrayLoader(), 'en');
+        $container = new Container();
+        $validator = (new ValidatorFactory($translator, $container))->make(
+            $request->get_params(),
+            [
+                'didgeridoo_subdomain' => ['regex:/^(?![-.])[a-zA-Z0-9.-]+(?<![-.])$/i'],
+                'didgeridoo_main_did' => ['regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'],
+                'didgeridoo_did_list' => ['required', 'json'],
+            ],
+            [
+                'didgeridoo_subdomain.regex' => 'The subdomain may only contain letters, numbers, dashes, and periods, and may not start or end with a dash or period.',
+                'didgeridoo_main_did.regex' => 'DID invalid.',
+                'didgeridoo_did_list'=> 'Something went wrong with the DID list. Please refresh your page.',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return $validator->errors()->toArray();
+        }
+
+        $didList = json_decode($request->get_param('didgeridoo_did_list'), true);
+
+        $didListValidator = (new ValidatorFactory($translator, $container))->make(
+            $didList,
+            [
+                '*.name' => ['required', 'max:63', 'regex:/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/i'],
+                '*.did' => ['required', 'max:127', 'regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'],
+            ],
+            [
+                '*.name.regex' => 'The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash.',
+                '*.did.regex' => 'DID invalid.',
+            ]
+        );
+
+        if ($didListValidator->fails()) {
+            return $didListValidator->errors()->toArray();
         }
 
         //Get the data and sanitize
