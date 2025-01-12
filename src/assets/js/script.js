@@ -8,60 +8,88 @@ const App = () => {
   const [domainName, setDomainName] = useState("");
   const [didSettings, setDidSettings] = useState([]);
   const [siteDomain, setSiteDomain] = useState("");
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     /**
      * Initialize the options fields with the data received from the REST API
      * endpoint provided by the plugin.
      */
-    wp.apiFetch({ path: "/react-settings-page/v1/options" }).then((data) => {
-      setMainDid(data["didgeridoo_main_did"]);
-      setDomainName(data["didgeridoo_subdomain"]);
-      setSiteDomain(data["site_domain"]);
+    wp.apiFetch({ path: "/react-settings-page/v1/options" })
+      .then((data) => {
+        setMainDid(data["didgeridoo_main_did"]);
+        setDomainName(data["didgeridoo_subdomain"]);
+        setSiteDomain(data["site_domain"]);
 
-      // deserialize the didSettings
-      const didSettingsList = JSON.parse(data["didgeridoo_did_list"]);
-      setDidSettings(didSettingsList);
-    });
+        // deserialize the didSettings
+        const didSettingsList = JSON.parse(data["didgeridoo_did_list"]);
+        setDidSettings(didSettingsList);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   });
 
   const userHandleList = didSettings.map((setting, index) => {
+    const nameErrors = errors[index + '.name'] ? errors[index + '.name'] : [];
+    const didErrors = errors[index + '.did'] ? errors[index + '.did'] : [];
+
+    const nameErrorList = nameErrors.map((error) => {
+      return <li>{error}</li>;
+    });
+
+    const didErrorList = didErrors.map((error) => {
+      return <li>{error}</li>;
+    });
+
+    const hasErrors = nameErrors.length > 0 || didErrors.length > 0;
+
     return (
-      <div class="user-table__row">
-        <input
-          className="user-table__input"
-          value={setting["name"]}
-          onChange={(event) => {
-            let newSettings = [...didSettings];
-            newSettings[index] = {
-              ...newSettings[index],
-              name: event.target.value,
-            };
-            setDidSettings(newSettings);
-          }}
-        />
-        <input
-          className="user-table__input"
-          value={setting["did"]}
-          onChange={(event) => {
-            let newSettings = [...didSettings];
-            newSettings[index] = {
-              ...newSettings[index],
-              did: event.target.value,
-            };
-            setDidSettings(newSettings);
-          }}
-        />
-        <button
-          className="user-table__input button button-danger"
-          onClick={() => {
-            let newSettings = didSettings.filter((_, i) => i !== index);
-            setDidSettings(newSettings);
-          }}
-        >
-          Remove
-        </button>
-      </div>
+      <>
+        {hasErrors && (
+          <div className="user-table__row user-table__row--error">
+            <ul>
+              {nameErrorList}
+              {didErrorList}
+            </ul>
+          </div>
+        )}
+        <div class="user-table__row">
+          <input
+            className="user-table__input"
+            value={setting["name"]}
+            onChange={(event) => {
+              let newSettings = [...didSettings];
+              newSettings[index] = {
+                ...newSettings[index],
+                name: event.target.value,
+              };
+              setDidSettings(newSettings);
+            }}
+          />
+          <input
+            className="user-table__input"
+            value={setting["did"]}
+            onChange={(event) => {
+              let newSettings = [...didSettings];
+              newSettings[index] = {
+                ...newSettings[index],
+                did: event.target.value,
+              };
+              setDidSettings(newSettings);
+            }}
+          />
+          <button
+            className="user-table__input button button-danger"
+            onClick={() => {
+              let newSettings = didSettings.filter((_, i) => i !== index);
+              setDidSettings(newSettings);
+            }}
+          >
+            Remove
+          </button>
+        </div>
+      </>
     );
   });
 
@@ -76,6 +104,18 @@ const App = () => {
           <h2>Main DID</h2>
         </div>
 
+        {
+          errors['didgeridoo_main_did'] && (
+            <div className="ddoo__row ddoo__row--error">
+              <ul>
+                {errors['didgeridoo_main_did'].map((error) => {
+                  return <li>{error}</li>;
+                })}
+              </ul>
+            </div>
+          )
+        }
+
         <div className="ddoo__row">
           <input
             className="ddoo_field-single-input"
@@ -89,6 +129,18 @@ const App = () => {
         <div className="ddoo__row ddoo__row--label">
           <h2>Subdomain</h2>
         </div>
+
+        {
+          errors['didgeridoo_subdomain'] && (
+            <div className="ddoo__row ddoo__row--error">
+              <ul>
+                {errors['didgeridoo_subdomain'].map((error) => {
+                  return <li>{error}</li>;
+                })}
+              </ul>
+            </div>
+          )
+        }
 
         <div className="ddoo__row">
           <label>cool-username.</label>
@@ -106,15 +158,25 @@ const App = () => {
           <h2>DID User Handle Settings</h2>
         </div>
 
+        {
+          errors['didgeridoo_did_list'] && (
+            <div className="ddoo__row ddoo__row--error">
+              <ul>
+                {errors['didgeridoo_did_list'].map((error) => {
+                  return <li>{error}</li>;
+                })}
+              </ul>
+            </div>
+          )
+        }
+
         <div className="ddoo__row ddoo__row--short-spacing">
           <div className="user-table">
             <div class="user-table__row user-table__row--header">
               <label>User Handle</label>
               <label>DID</label>
             </div>
-            <div class="user-table__body">
-            {userHandleList}
-            </div>
+            <div class="user-table__body">{userHandleList}</div>
           </div>
         </div>
 
@@ -149,6 +211,8 @@ const App = () => {
                 },
               }).then((data) => {
                 alert("Options saved successfully!");
+              }).catch((error) => {
+                setErrors(error);
               });
             }}
           >

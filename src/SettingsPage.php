@@ -153,7 +153,8 @@ class SettingsPage
         );
 
         if ($validator->fails()) {
-            return $validator->errors()->toArray();
+            $response = new \WP_REST_Response($validator->errors()->toArray(), '400');
+            return $response;
         }
 
         $didList = json_decode($request->get_param('didgeridoo_did_list'), true);
@@ -171,7 +172,8 @@ class SettingsPage
         );
 
         if ($didListValidator->fails()) {
-            return $didListValidator->errors()->toArray();
+            $response = new \WP_REST_Response($didListValidator->errors()->toArray(), '400');
+            return $response;
         }
 
         //Get the data and sanitize

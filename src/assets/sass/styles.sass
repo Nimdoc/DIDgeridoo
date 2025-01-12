@@ -3,6 +3,7 @@
 .didgeridoo
     $spacing: 20px
     $danger-color: #d63638
+    $danger-color-soft: #f8d7da
 
     h1, h2, h3, h4, h5, h6
         margin: 0
@@ -51,6 +52,10 @@
             &--user-handle
                 margin-bottom: 0
 
+            &--error
+                background: $danger-color-soft
+                color: $danger-color
+
     .user-table
         display: flex
         flex-flow: column
@@ -65,6 +70,10 @@
         &__row
             display: grid
             grid-template-columns: 1fr 1fr 80px
+
+            &--error
+                background: $danger-color-soft
+                color: $danger-color
 
         &__body
             > * > *:not(:first-child)
