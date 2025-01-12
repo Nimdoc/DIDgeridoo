@@ -25,6 +25,7 @@ class WellKnownRouteResolver
         $httpHost = isset($_SERVER['HTTP_HOST']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])) : '';
 
         // Check if the handle is valid https://atproto.com/specs/handle#handle-identifier-syntax
+        // Don't even bother handling invalid handles
         if (!preg_match('/^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$/i', $httpHost)) {
             status_header(400);
             header('Content-Type: text/plain');
@@ -53,10 +54,14 @@ class WellKnownRouteResolver
 
         $userSubdomain = ($didgeridooSubdomain ? $didgeridooSubdomain . '.' : '') . $siteDomain;
 
+        $userSetting = $this->array_find($didList, function($value) use ($name) {
+            return $value['name'] === $name;
+        });
+
         if ($httpHost === $siteDomain) {
             $did = get_option('didgeridoo_main_did');
-        } else if (isset($didList[$name]) && $domain === $userSubdomain) {
-            $did = $didList[$name];
+        } else if ($domain === $userSubdomain && $userSetting) {
+            $did = $userSetting['did'];
         } else {
             status_header(404);
             header('Content-Type: text/plain');
@@ -69,5 +74,21 @@ class WellKnownRouteResolver
         echo $did;
         echo "\n";
         exit;
+    }
+
+    /**
+     * PHP 8.0 has array_find, but we need to support PHP 7.4 for WordPress
+     * @param array $array
+     * @param callable $callback
+     * @return mixed|null
+     */
+    private function array_find($array, $callback)
+    {
+        foreach ($array as $key => $value) {
+            if ($callback($value, $key)) {
+                return $value;
+            }
+        }
+        return null;
     }
 }
