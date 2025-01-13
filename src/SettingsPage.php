@@ -131,7 +131,7 @@ class SettingsPage
         if (!current_user_can('manage_options')) {
             return new \WP_Error(
                 'rest_update_error',
-                'Sorry, you are not allowed to update the DAEXT UI Test options.',
+                'Sorry, you are not allowed to update the DIDgeridoo options.',
                 ['status' => 403]
             );
         }
