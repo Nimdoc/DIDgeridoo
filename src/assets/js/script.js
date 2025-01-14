@@ -9,6 +9,7 @@ const App = () => {
   const [didSettings, setDidSettings] = useState([]);
   const [siteDomain, setSiteDomain] = useState("");
   const [errors, setErrors] = useState({});
+  const [successMessages, setSuccessMessages] = useState({});
 
   useEffect(() => {
     /**
@@ -35,6 +36,24 @@ const App = () => {
     delete newErrors[key];
     setErrors(newErrors);
   };
+
+  const successMessagesList = Object.keys(successMessages).map((key) => {
+    return (
+      <div className="ddoo__row ddoo__row--success">
+        <p>{successMessages[key]}</p>
+        <button
+          className="ddoo__row--success__close"
+          onClick={() => {
+            let newSuccessMessages = { ...successMessages };
+            delete newSuccessMessages[key];
+            setSuccessMessages(newSuccessMessages);
+          }}
+        >
+          X
+        </button>
+      </div>
+    );
+  });
 
   const userHandleList = didSettings.map((setting, index) => {
     const nameErrors = errors[index + ".name"] ? errors[index + ".name"] : [];
@@ -118,6 +137,8 @@ const App = () => {
         <div className="ddoo__row">
           <h1>DIDgeridoo Settings</h1>
         </div>
+
+        {successMessagesList}
 
         <div className="ddoo__row ddoo__row--label">
           <h2>Main DID</h2>
@@ -247,7 +268,8 @@ const App = () => {
                 },
               })
                 .then((data) => {
-                  alert("Options saved successfully!");
+                  setErrors({});
+                  setSuccessMessages({ success: data});
                 })
                 .catch((error) => {
                   setErrors(error);

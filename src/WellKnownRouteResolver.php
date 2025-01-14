@@ -54,15 +54,17 @@ class WellKnownRouteResolver
 
         $userSubdomain = ($didgeridooSubdomain ? $didgeridooSubdomain . '.' : '') . $siteDomain;
 
-        $userSetting = $this->array_find($didList, function($value) use ($name) {
-            return $value['name'] === $name;
-        });
-
         if ($httpHost === $siteDomain) {
             $did = get_option('didgeridoo_main_did');
-        } else if ($domain === $userSubdomain && $userSetting) {
-            $did = $userSetting['did'];
-        } else {
+        } else if ($domain === $userSubdomain) {
+            $userSetting = $this->array_find($didList, function($value) use ($name) {
+                return $value['name'] === $name;
+            });
+
+            $did = $userSetting['did'] ?? false;
+        } 
+
+        if (empty($did)) {
             status_header(404);
             header('Content-Type: text/plain');
             echo "Not found\n";

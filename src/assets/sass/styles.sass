@@ -4,6 +4,8 @@
     $spacing: 20px
     $danger-color: #d63638
     $danger-color-soft: #f8d7da
+    $success-color: #28a745
+    $success-color-soft: #d4edda
 
     h1, h2, h3, h4, h5, h6
         margin: 0
@@ -59,6 +61,18 @@
 
             &--user-handle
                 margin-bottom: 0
+
+            &--success
+                background: $success-color-soft
+                color: $success-color
+                padding: math.div($spacing, 2)
+                margin-bottom: math.div($spacing, 2)
+                display: flex
+                flex-flow: row
+                justify-content: space-between
+
+                > *:not(:first-child)
+                    margin-left: math.div($spacing, 2)
 
             &--error
                 background: $danger-color-soft
@@ -124,6 +138,7 @@
 
             &--error
                 border-color: $danger-color
+                background: $danger-color-soft
 
         &__error-list
             top: 0
