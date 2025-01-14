@@ -30,9 +30,15 @@ const App = () => {
       });
   });
 
+  const removeError = (key) => {
+    let newErrors = { ...errors };
+    delete newErrors[key];
+    setErrors(newErrors);
+  };
+
   const userHandleList = didSettings.map((setting, index) => {
-    const nameErrors = errors[index + '.name'] ? errors[index + '.name'] : [];
-    const didErrors = errors[index + '.did'] ? errors[index + '.did'] : [];
+    const nameErrors = errors[index + ".name"] ? errors[index + ".name"] : [];
+    const didErrors = errors[index + ".did"] ? errors[index + ".did"] : [];
 
     const nameErrorList = nameErrors.map((error) => {
       return <li>{error}</li>;
@@ -42,52 +48,65 @@ const App = () => {
       return <li>{error}</li>;
     });
 
-    const hasErrors = nameErrors.length > 0 || didErrors.length > 0;
+    const hasNameErrors = nameErrors.length > 0;
+    const hasDidErrors = didErrors.length > 0;
 
     return (
       <>
-        {hasErrors && (
-          <div className="user-table__row user-table__row--error">
-            <ul>
-              {nameErrorList}
-              {didErrorList}
-            </ul>
-          </div>
-        )}
         <div class="user-table__row">
-          <input
-            className="user-table__input"
-            value={setting["name"]}
-            onChange={(event) => {
-              let newSettings = [...didSettings];
-              newSettings[index] = {
-                ...newSettings[index],
-                name: event.target.value,
-              };
-              setDidSettings(newSettings);
-            }}
-          />
-          <input
-            className="user-table__input"
-            value={setting["did"]}
-            onChange={(event) => {
-              let newSettings = [...didSettings];
-              newSettings[index] = {
-                ...newSettings[index],
-                did: event.target.value,
-              };
-              setDidSettings(newSettings);
-            }}
-          />
-          <button
-            className="user-table__input button button-danger"
-            onClick={() => {
-              let newSettings = didSettings.filter((_, i) => i !== index);
-              setDidSettings(newSettings);
-            }}
-          >
-            Remove
-          </button>
+          <div class="user-table__col">
+            {hasNameErrors && (
+              <div class="user-table__error-list">
+                <ul>{nameErrorList}</ul>
+              </div>
+            )}
+            <input
+              className={`user-table__input ${
+                hasNameErrors && "user-table__input--error"
+              }`}
+              value={setting["name"]}
+              onChange={(event) => {
+                let newSettings = [...didSettings];
+                newSettings[index] = {
+                  ...newSettings[index],
+                  name: event.target.value,
+                };
+                setDidSettings(newSettings);
+              }}
+            />
+          </div>
+          <div class="user-table__col">
+            {hasDidErrors && (
+              <div class="user-table__error-list">
+                <ul>{didErrorList}</ul>
+              </div>
+            )}
+            <input
+              className={`user-table__input ${
+                hasDidErrors && "user-table__input--error"
+              }`}
+              value={setting["did"]}
+              onChange={(event) => {
+                let newSettings = [...didSettings];
+                newSettings[index] = {
+                  ...newSettings[index],
+                  did: event.target.value,
+                };
+                setDidSettings(newSettings);
+              }}
+            />
+          </div>
+          <div class="user-table__col">
+            <button
+              className="user-table__input button button-danger"
+              onClick={() => {
+                let newSettings = didSettings.filter((_, i) => i !== index);
+                setDidSettings(newSettings);
+              }}
+            >
+              Remove
+            </button>
+          </div>
         </div>
       </>
     );
@@ -104,17 +123,23 @@ const App = () => {
           <h2>Main DID</h2>
         </div>
 
-        {
-          errors['didgeridoo_main_did'] && (
-            <div className="ddoo__row ddoo__row--error">
-              <ul>
-                {errors['didgeridoo_main_did'].map((error) => {
-                  return <li>{error}</li>;
-                })}
-              </ul>
-            </div>
-          )
-        }
+        {errors["didgeridoo_main_did"] && (
+          <div className="ddoo__row ddoo__row--error">
+            <ul>
+              {errors["didgeridoo_main_did"].map((error) => {
+                return <li>{error}</li>;
+              })}
+            </ul>
+            <button
+              className="ddoo__row--error__close"
+              onClick={() => {
+                removeError("didgeridoo_main_did");
+              }}
+            >
+              X
+            </button>
+          </div>
+        )}
 
         <div className="ddoo__row">
           <input
@@ -130,17 +155,23 @@ const App = () => {
           <h2>Subdomain</h2>
         </div>
 
-        {
-          errors['didgeridoo_subdomain'] && (
-            <div className="ddoo__row ddoo__row--error">
-              <ul>
-                {errors['didgeridoo_subdomain'].map((error) => {
-                  return <li>{error}</li>;
-                })}
-              </ul>
-            </div>
-          )
-        }
+        {errors["didgeridoo_subdomain"] && (
+          <div className="ddoo__row ddoo__row--error">
+            <ul>
+              {errors["didgeridoo_subdomain"].map((error) => {
+                return <li>{error}</li>;
+              })}
+            </ul>
+            <button
+              className="ddoo__row--error__close"
+              onClick={() => {
+                removeError("didgeridoo_subdomain");
+              }}
+            >
+              X
+            </button>
+          </div>
+        )}
 
         <div className="ddoo__row">
           <label>cool-username.</label>
@@ -158,17 +189,23 @@ const App = () => {
           <h2>DID User Handle Settings</h2>
         </div>
 
-        {
-          errors['didgeridoo_did_list'] && (
-            <div className="ddoo__row ddoo__row--error">
-              <ul>
-                {errors['didgeridoo_did_list'].map((error) => {
-                  return <li>{error}</li>;
-                })}
-              </ul>
-            </div>
-          )
-        }
+        {errors["didgeridoo_did_list"] && (
+          <div className="ddoo__row ddoo__row--error">
+            <ul>
+              {errors["didgeridoo_did_list"].map((error) => {
+                return <li>{error}</li>;
+              })}
+            </ul>
+            <button
+              className="ddoo__row--error__close"
+              onClick={() => {
+                removeError("didgeridoo_did_list");
+              }}
+            >
+              X
+            </button>
+          </div>
+        )}
 
         <div className="ddoo__row ddoo__row--short-spacing">
           <div className="user-table">
@@ -199,7 +236,6 @@ const App = () => {
             onClick={() => {
               // json serialize the didSettings
               const didSettingsJson = JSON.stringify(didSettings);
-              console.log(didSettingsJson);
 
               wp.apiFetch({
                 path: "/react-settings-page/v1/options",
@@ -209,11 +245,13 @@ const App = () => {
                   didgeridoo_subdomain: domainName,
                   didgeridoo_did_list: didSettingsJson,
                 },
-              }).then((data) => {
-                alert("Options saved successfully!");
-              }).catch((error) => {
-                setErrors(error);
-              });
+              })
+                .then((data) => {
+                  alert("Options saved successfully!");
+                })
+                .catch((error) => {
+                  setErrors(error);
+                });
             }}
           >
             Save
