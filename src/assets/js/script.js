@@ -42,14 +42,13 @@ const App = () => {
       <div className="ddoo__row ddoo__row--success">
         <p>{successMessages[key]}</p>
         <button
-          className="ddoo__row--success__close"
+          className="ddoo__button-close ddoo__button-close--success notice-dismiss"
           onClick={() => {
             let newSuccessMessages = { ...successMessages };
             delete newSuccessMessages[key];
             setSuccessMessages(newSuccessMessages);
           }}
         >
-          X
         </button>
       </div>
     );
@@ -152,12 +151,11 @@ const App = () => {
               })}
             </ul>
             <button
-              className="ddoo__row--error__close"
+              className="ddoo__button-close ddoo__button-close--error notice-dismiss"
               onClick={() => {
                 removeError("didgeridoo_main_did");
               }}
             >
-              X
             </button>
           </div>
         )}
@@ -184,12 +182,11 @@ const App = () => {
               })}
             </ul>
             <button
-              className="ddoo__row--error__close"
+              className="ddoo__button-close ddoo__button-close--error notice-dismiss"
               onClick={() => {
                 removeError("didgeridoo_subdomain");
               }}
             >
-              X
             </button>
           </div>
         )}
@@ -218,12 +215,11 @@ const App = () => {
               })}
             </ul>
             <button
-              className="ddoo__row--error__close"
+              className="ddoo__button-close ddoo__buton-close--error notice-dismiss"
               onClick={() => {
                 removeError("didgeridoo_did_list");
               }}
             >
-              X
             </button>
           </div>
         )}
@@ -273,6 +269,7 @@ const App = () => {
                 })
                 .catch((error) => {
                   setErrors(error);
+                  setSuccessMessages({});
                 });
             }}
           >

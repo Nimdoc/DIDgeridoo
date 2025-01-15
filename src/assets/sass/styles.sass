@@ -86,6 +86,20 @@
                 > *:not(:first-child)
                     margin-left: math.div($spacing, 2)
 
+        &__button-close
+            position: relative
+
+            &::before
+                transform: scale(1.5)
+
+            &--success
+                &::before
+                    color: $success-color
+
+            &--error
+                &::before
+                    color: $danger-color
+
     .user-table
         display: flex
         flex-flow: column

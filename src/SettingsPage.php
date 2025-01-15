@@ -162,12 +162,13 @@ class SettingsPage
         $didListValidator = (new ValidatorFactory($translator, $container))->make(
             $didList,
             [
-                '*.name' => ['required', 'max:63', 'regex:/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/i'],
+                '*.name' => ['required', 'max:63', 'distinct', 'regex:/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/i'],
                 '*.did' => ['required', 'max:127', 'regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'],
             ],
             [
                 '*.name.regex' => 'The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash.',
                 '*.did.regex' => 'DID invalid.',
+                '*.name.distinct' => 'The user handle must be unique.',
             ]
         );
 
