@@ -72,7 +72,10 @@ const App = () => {
     return (
       <>
         <div class="user-table__row">
-          <div class="user-table__col">
+          <div class="user-table__col user-table__col--name">
+            <div class="user-table__label">
+              <label>User Handle</label>
+            </div>
             {hasNameErrors && (
               <div class="user-table__error-list">
                 <ul>{nameErrorList}</ul>
@@ -88,12 +91,16 @@ const App = () => {
                 newSettings[index] = {
                   ...newSettings[index],
                   name: event.target.value,
+                  last_updated: new Date().toLocaleString(),
                 };
                 setDidSettings(newSettings);
               }}
             />
           </div>
-          <div class="user-table__col">
+          <div class="user-table__col user-table__col--did">
+            <div class="user-table__label">
+              <label>DID</label>
+            </div>
             {hasDidErrors && (
               <div class="user-table__error-list">
                 <ul>{didErrorList}</ul>
@@ -109,10 +116,17 @@ const App = () => {
                 newSettings[index] = {
                   ...newSettings[index],
                   did: event.target.value,
+                  last_updated: new Date().toLocaleString(),
                 };
                 setDidSettings(newSettings);
               }}
             />
+          </div>
+          <div class="user-table__col user-table__last-updated">
+              <div class="user-table__label">
+                <label>Last Updated</label>
+              </div>
+              {setting["last_updated"] ? setting["last_updated"] : "-"}
           </div>
           <div class="user-table__col">
             <button
@@ -229,6 +243,7 @@ const App = () => {
             <div class="user-table__row user-table__row--header">
               <label>User Handle</label>
               <label>DID</label>
+              <label>Last Updated</label>
             </div>
             <div class="user-table__body">{userHandleList}</div>
           </div>

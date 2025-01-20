@@ -7,6 +7,10 @@
     $success-color: #28a745
     $success-color-soft: #d4edda
     $mobile: " screen and (max-width: 782px)"
+    $desktop: " screen and (min-width: 783px)"
+
+    *, *::before, *::after
+        box-sizing: border-box
 
     h1, h2, h3, h4, h5, h6
         margin: 0
@@ -31,16 +35,16 @@
         white-space: nowrap
 
     input
+        min-height: 40px
         box-shadow: 0 0 0 transparent
         border-radius: 4px
         border: 1px solid #8c8f94
         background-color: #fff
         color: #2c3338
-        min-height: 30px
         width: 100%
 
-        @media #{$mobile}
-            min-height: 40px
+        @media #{$desktop}
+            min-height: 30px
 
     .ddoo
         &__container
@@ -110,45 +114,87 @@
         width: 100%
 
         input
-            border-radius: 0
+            @media #{$desktop}
+                border-radius: 0
 
         button
-            border-radius: 0
+            @media #{$desktop}
+                border-radius: 0
+
+        &__label
+            display: flex
+            flex-flow: row
+            justify-content: space-between
+            align-items: center
+            margin-bottom: math.div($spacing, 4)
+
+            @media #{$desktop}
+                display: none
+
+        &__last-updated
+            display: flex
+            align-items: center
+            justify-content: center
+
+            @media #{$desktop}
+                border-left: 1px solid rgb(140, 143, 148)
 
         &__row
             display: grid
-            grid-template-columns: 1fr 1fr 80px
+            grid-template-columns: 1fr 80px
+            grid-template-rows: 1fr 1fr 1fr
+
+            @media #{$desktop}
+                grid-template-columns: 1fr 1fr 1fr 80px
+                grid-template-rows: 1fr
+
+            &--header
+                display: none
+                
+                @media #{$desktop}
+                    display: grid
 
             &--error
                 background: $danger-color-soft
                 color: $danger-color
 
-            > * input:first-child
-                border-right: 0
+            @media #{$desktop}
+                > * input:first-child
+                    border-right: 0
 
-            &:first-child > :first-child > *
-                border-top-left-radius: 4px
+                &:first-child > :first-child > *
+                    border-top-left-radius: 4px
 
-            &:first-child > :last-child > *
-                border-top-right-radius: 4px
+                &:first-child > :last-child > *
+                    border-top-right-radius: 4px
 
-            &:last-child > :first-child > *
-                border-bottom-left-radius: 4px
+                &:last-child > :first-child > *
+                    border-bottom-left-radius: 4px
 
-            &:last-child > :last-child > *
-                border-bottom-right-radius: 4px
+                &:last-child > :last-child > *
+                    border-bottom-right-radius: 4px
 
         &__col
             position: relative
+            display: flex
+            flex-flow: column
+            justify-content: center
+            margin-bottom: math.div($spacing, 2)
+
+            @media #{$desktop}
+                margin-bottom: 0
+
+            &--name, &--did
+                grid-column: span 2
+
+                @media #{$desktop}
+                    grid-column: span 1
 
             &:hover
                 .user-table__error-list
                     display: block
 
         &__body
-            > * > *:not(:first-child)
-                border-left: 0
-
             > *:not(:first-child)
                 margin-top: math.div($spacing, 4)
 
