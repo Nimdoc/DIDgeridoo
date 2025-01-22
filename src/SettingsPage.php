@@ -180,11 +180,20 @@ class SettingsPage
         //Get the data and sanitize
         $didgeridoo_subdomain = sanitize_text_field($request->get_param('didgeridoo_subdomain'));
         $didgeridoo_main_did = sanitize_text_field($request->get_param('didgeridoo_main_did'));
-        $didgeridoo_did_list = sanitize_text_field($request->get_param('didgeridoo_did_list'));
+        $didgeridoo_did_list_string = sanitize_text_field($request->get_param('didgeridoo_did_list'));
+
+        $didgeridoo_did_list = json_decode($didgeridoo_did_list_string, true);
+
+        // Sort the DID list by name ascending
+        usort($didgeridoo_did_list, function($a, $b) {
+            return $a['name'] <=> $b['name'];
+        });
+
+        $didgeridoo_did_list_string = json_encode($didgeridoo_did_list);
 
         update_option('didgeridoo_subdomain', $didgeridoo_subdomain);
         update_option('didgeridoo_main_did', $didgeridoo_main_did);
-        update_option('didgeridoo_did_list', $didgeridoo_did_list);
+        update_option('didgeridoo_did_list', $didgeridoo_did_list_string);
 
         $response = new \WP_REST_Response('Data successfully added.', '200');
 

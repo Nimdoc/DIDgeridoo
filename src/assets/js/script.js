@@ -54,6 +54,28 @@ const App = () => {
     );
   });
 
+  const sortDidSettings = (sortBy) => {
+    if (sortBy === "name_asc") {
+      didSettings.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
+    } else if (sortBy === "name_desc") {
+      didSettings.sort((a, b) => {
+        return b.name.localeCompare(a.name);
+      });
+    } else if (sortBy === "date_asc") {
+      didSettings.sort((a, b) => {
+        return new Date(a.last_updated) - new Date(b.last_updated);
+      });
+    } else if (sortBy === "date_desc") {
+      didSettings.sort((a, b) => {
+        return new Date(b.last_updated) - new Date(a.last_updated);
+      });
+    }
+
+    setDidSettings([...didSettings]);
+  };
+
   const userHandleList = didSettings.map((setting, index) => {
     const nameErrors = errors[index + ".name"] ? errors[index + ".name"] : [];
     const didErrors = errors[index + ".did"] ? errors[index + ".did"] : [];
@@ -217,8 +239,17 @@ const App = () => {
           <label>.{siteDomain}</label>
         </div>
 
-        <div className="ddoo__row ddoo__row--label">
+        <div className="ddoo__row ddoo__row--label ddoo__row--handle-settings">
           <h2>DID User Handle Settings</h2>
+          <div className="ddoo__sort">
+            <label htmlFor="sort">Sort by</label>
+            <select onChange={(event) => sortDidSettings(event.target.value)}>
+              <option value="name_asc" selected>Sort by Name Asc.</option>
+              <option value="name_desc">Sort by Name Desc.</option>
+              <option value="date_asc">Sort by Date Asc.</option>
+              <option value="date_desc">Sort by Date Desc.</option>
+            </select>
+          </div>
         </div>
 
         {errors["didgeridoo_did_list"] && (
