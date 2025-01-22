@@ -1,5 +1,7 @@
 import "../sass/styles.sass";
 
+const { __, _x, _n, sprintf } = wp.i18n;
+
 const useEffect = wp.element.useState;
 const useState = wp.element.useState;
 
@@ -96,7 +98,7 @@ const App = () => {
         <div class="user-table__row">
           <div class="user-table__col user-table__col--name">
             <div class="user-table__label">
-              <label>User Handle</label>
+              <label>{__("User Handle", "didgeridoo")}</label>
             </div>
             {hasNameErrors && (
               <div class="user-table__error-list">
@@ -121,7 +123,7 @@ const App = () => {
           </div>
           <div class="user-table__col user-table__col--did">
             <div class="user-table__label">
-              <label>DID</label>
+              <label>{__("DID", "didgeridoo")}</label>
             </div>
             {hasDidErrors && (
               <div class="user-table__error-list">
@@ -145,10 +147,10 @@ const App = () => {
             />
           </div>
           <div class="user-table__col user-table__last-updated">
-              <div class="user-table__label">
-                <label>Last Updated</label>
-              </div>
-              {setting["last_updated"] ? setting["last_updated"] : "-"}
+            <div class="user-table__label">
+              <label>{__('Last Updated', 'didgeridoo')}</label>
+            </div>
+            {setting["last_updated"] ? setting["last_updated"] : "-"}
           </div>
           <div class="user-table__col">
             <button
@@ -158,7 +160,7 @@ const App = () => {
                 setDidSettings(newSettings);
               }}
             >
-              Remove
+              {__("Remove", "didgeridoo")}
             </button>
           </div>
         </div>
@@ -170,13 +172,13 @@ const App = () => {
     <div className="didgeridoo">
       <div className="ddoo__container">
         <div className="ddoo__row">
-          <h1>DIDgeridoo Settings</h1>
+          <h1>{__('DIDgeridoo Settings', 'didgeridoo')}</h1>
         </div>
 
         {successMessagesList}
 
         <div className="ddoo__row ddoo__row--label">
-          <h2>Main DID</h2>
+          <h2>{__('Main DID', 'didgeridoo')}</h2>
         </div>
 
         {errors["didgeridoo_main_did"] && (
@@ -207,7 +209,7 @@ const App = () => {
         </div>
 
         <div className="ddoo__row ddoo__row--label">
-          <h2>Subdomain</h2>
+          <h2>{__('Subdomain', 'didgeridoo')}</h2>
         </div>
 
         {errors["didgeridoo_subdomain"] && (
@@ -228,7 +230,7 @@ const App = () => {
         )}
 
         <div className="ddoo__row">
-          <label>cool-username.</label>
+          <label>{__('cool-username.', 'didgeridoo')}</label>
           <input
             className="ddoo_field-single-input"
             value={domainName}
@@ -240,14 +242,14 @@ const App = () => {
         </div>
 
         <div className="ddoo__row ddoo__row--label ddoo__row--handle-settings">
-          <h2>DID User Handle Settings</h2>
+          <h2>{__('DID User Handle Settings', 'didgeridoo')}</h2>
           <div className="ddoo__sort">
-            <label htmlFor="sort">Sort by</label>
+            <label htmlFor="sort">{__('Sort by', 'didgeridoo')}</label>
             <select onChange={(event) => sortDidSettings(event.target.value)}>
-              <option value="name_asc" selected>Sort by Name Asc.</option>
-              <option value="name_desc">Sort by Name Desc.</option>
-              <option value="date_asc">Sort by Date Asc.</option>
-              <option value="date_desc">Sort by Date Desc.</option>
+              <option value="name_asc" selected>{__('Sort by Name Asc.', 'didgeridoo')}</option>
+              <option value="name_desc">{__('Sort by Name Desc.', 'didgeridoo')}</option>
+              <option value="date_asc">{__('Sort by Date Asc.', 'didgeridoo')}</option>
+              <option value="date_desc">{__('Sort by Date Desc.', 'didgeridoo')}</option>
             </select>
           </div>
         </div>
@@ -272,9 +274,9 @@ const App = () => {
         <div className="ddoo__row ddoo__row--short-spacing">
           <div className="user-table">
             <div class="user-table__row user-table__row--header">
-              <label>User Handle</label>
-              <label>DID</label>
-              <label>Last Updated</label>
+              <label>{__('User Handle', 'didgeridoo')}</label>
+              <label>{__('DID', 'didgeridoo')}</label>
+              <label>{__('Last Updated', 'didgeridoo')}</label>
             </div>
             <div class="user-table__body">{userHandleList}</div>
           </div>
@@ -288,7 +290,7 @@ const App = () => {
                 setDidSettings([...didSettings, { name: "", did: "" }]);
               }}
             >
-              Add User
+              {__('Add User', 'didgeridoo')}
             </button>
           </div>
         </div>
@@ -319,7 +321,7 @@ const App = () => {
                 });
             }}
           >
-            Save
+            {__('Save', 'didgeridoo')}
           </button>
         </div>
       </div>

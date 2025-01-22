@@ -131,7 +131,7 @@ class SettingsPage
         if (!current_user_can('manage_options')) {
             return new \WP_Error(
                 'rest_update_error',
-                'Sorry, you are not allowed to update the DIDgeridoo options.',
+                __('Sorry, you are not allowed to update the DIDgeridoo options.', 'didgeridoo'),
                 ['status' => 403]
             );
         }
@@ -146,9 +146,9 @@ class SettingsPage
                 'didgeridoo_did_list' => ['required', 'json'],
             ],
             [
-                'didgeridoo_subdomain.regex' => 'The subdomain may only contain letters, numbers, dashes, and periods, and may not start or end with a dash or period.',
-                'didgeridoo_main_did.regex' => 'DID invalid.',
-                'didgeridoo_did_list'=> 'Something went wrong with the DID list. Please refresh your page.',
+                'didgeridoo_subdomain.regex' => __('The subdomain may only contain letters, numbers, dashes, and periods, and may not start or end with a dash or period.', 'didgeridoo'),
+                'didgeridoo_main_did.regex' => __('DID invalid.', 'didgeridoo'),
+                'didgeridoo_did_list'=> __('Something went wrong with the DID list. Please refresh your page.', 'didgeridoo'),
             ]
         );
 
@@ -166,9 +166,9 @@ class SettingsPage
                 '*.did' => ['required', 'max:127', 'regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'],
             ],
             [
-                '*.name.regex' => 'The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash.',
-                '*.did.regex' => 'DID invalid.',
-                '*.name.distinct' => 'The user handle must be unique.',
+                '*.name.regex' => __('The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash.', 'didgeridoo'),
+                '*.did.regex' => __('DID invalid.', 'didgeridoo'),
+                '*.name.distinct' => __('The user handle must be unique.', 'didgeridoo'),
             ]
         );
 
@@ -195,7 +195,7 @@ class SettingsPage
         update_option('didgeridoo_main_did', $didgeridoo_main_did);
         update_option('didgeridoo_did_list', $didgeridoo_did_list_string);
 
-        $response = new \WP_REST_Response('Data successfully added.', '200');
+        $response = new \WP_REST_Response(__('Data successfully added.', 'didgeridoo'), '200');
 
         return $response;
 

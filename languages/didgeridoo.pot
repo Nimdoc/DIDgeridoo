@@ -1,0 +1,101 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-01-22T22:15:21+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: didgeridoo\n"
+
+#: SettingsPage.php:149
+msgid "The subdomain may only contain letters, numbers, dashes, and periods, and may not start or end with a dash or period."
+msgstr ""
+
+#: SettingsPage.php:150
+#: SettingsPage.php:170
+msgid "DID invalid."
+msgstr ""
+
+#: SettingsPage.php:151
+msgid "Something went wrong with the DID list. Please refresh your page."
+msgstr ""
+
+#: SettingsPage.php:169
+msgid "The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash."
+msgstr ""
+
+#: SettingsPage.php:171
+msgid "The user handle must be unique."
+msgstr ""
+
+#: assets/js/script.js:101
+#: assets/js/script.js:277
+msgid "User Handle"
+msgstr ""
+
+#: assets/js/script.js:126
+#: assets/js/script.js:278
+msgid "DID"
+msgstr ""
+
+#: assets/js/script.js:151
+#: assets/js/script.js:279
+msgid "Last Updated"
+msgstr ""
+
+#: assets/js/script.js:163
+msgid "Remove"
+msgstr ""
+
+#: assets/js/script.js:175
+msgid "DIDgeridoo Settings"
+msgstr ""
+
+#: assets/js/script.js:181
+msgid "Main DID"
+msgstr ""
+
+#: assets/js/script.js:212
+msgid "Subdomain"
+msgstr ""
+
+#: assets/js/script.js:233
+msgid "cool-username."
+msgstr ""
+
+#: assets/js/script.js:245
+msgid "DID User Handle Settings"
+msgstr ""
+
+#: assets/js/script.js:247
+msgid "Sort by"
+msgstr ""
+
+#: assets/js/script.js:249
+msgid "Sort by Name Asc."
+msgstr ""
+
+#: assets/js/script.js:250
+msgid "Sort by Name Desc."
+msgstr ""
+
+#: assets/js/script.js:251
+msgid "Sort by Date Asc."
+msgstr ""
+
+#: assets/js/script.js:252
+msgid "Sort by Date Desc."
+msgstr ""
+
+#: assets/js/script.js:293
+msgid "Add User"
+msgstr ""
+
+#: assets/js/script.js:324
+msgid "Save"
+msgstr ""
