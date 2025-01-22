@@ -212,17 +212,26 @@
                 border-color: $danger-color
                 background: $danger-color-soft
 
-        &__error-list
-            top: 0
-            left: 0
-            right: 0
-            position: absolute
-            display: none
-            padding: math.div($spacing, 2)
-            background: $danger-color-soft
-            transform: translateY(-100%)
+        &__input
+            &--error
+                border-color: $danger-color
+                background: $danger-color-soft
 
-            &:hover
-                display: block
+        &__error-list
+            background: $danger-color-soft
+            margin-bottom: math.div($spacing, 2)
+            padding: math.div($spacing, 2)
+            
+            @media #{$desktop}
+                top: 0
+                left: 0
+                right: 0
+                position: absolute
+                display: none
+                padding: math.div($spacing, 2)
+                transform: translateY(-100%)
+
+                &:hover
+                    display: block
 
 
