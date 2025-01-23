@@ -1,4 +1,5 @@
 import "../sass/styles.sass";
+import PopupModal from "./PopupModal";
 
 const { __, _x, _n, sprintf } = wp.i18n;
 
@@ -179,6 +180,9 @@ const App = () => {
 
         <div className="ddoo__row ddoo__row--label">
           <h2>{__('Main DID', 'didgeridoo')}</h2>
+          <PopupModal title={__('Main DID', 'didgeridoo')}>
+            <p>{__('This is the main DID that will be used for the subdomain.', 'didgeridoo')}</p>
+          </PopupModal>
         </div>
 
         {errors["didgeridoo_main_did"] && (
@@ -210,6 +214,9 @@ const App = () => {
 
         <div className="ddoo__row ddoo__row--label">
           <h2>{__('Subdomain', 'didgeridoo')}</h2>
+          <PopupModal title={__('Subdomain', 'didgeridoo')}>
+            <p>{__('This is the subdomain that will be used to generate the user handles.', 'didgeridoo')}</p>
+          </PopupModal>
         </div>
 
         {errors["didgeridoo_subdomain"] && (
@@ -242,7 +249,12 @@ const App = () => {
         </div>
 
         <div className="ddoo__row ddoo__row--label ddoo__row--handle-settings">
-          <h2>{__('DID User Handle Settings', 'didgeridoo')}</h2>
+          <div className="ddoo__row-header">
+            <h2>{__('DID User Handle Settings', 'didgeridoo')}</h2>
+            <PopupModal title={__('DID User Handle Settings', 'didgeridoo')}>
+              <p>{__('These are the user handles that will be generated for the DID.', 'didgeridoo')}</p>
+            </PopupModal>
+          </div>
           <div className="ddoo__sort">
             <label htmlFor="sort">{__('Sort by', 'didgeridoo')}</label>
             <select onChange={(event) => sortDidSettings(event.target.value)}>
