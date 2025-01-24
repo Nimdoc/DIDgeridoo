@@ -164,11 +164,16 @@ class SettingsPage
             [
                 '*.name' => ['required', 'max:63', 'distinct', 'regex:/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/i'],
                 '*.did' => ['required', 'max:127', 'regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'],
+                '*.last_updated' => ['required', 'date'],
             ],
             [
+                '*.name.required' => __('The user handle is required.', 'didgeridoo'),
+                '*.name.max' => __('The user handle may not be more than 63 characters.', 'didgeridoo'),
+                '*.name.distinct' => __('The user handle must be unique.', 'didgeridoo'),
                 '*.name.regex' => __('The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash.', 'didgeridoo'),
                 '*.did.regex' => __('DID invalid.', 'didgeridoo'),
-                '*.name.distinct' => __('The user handle must be unique.', 'didgeridoo'),
+                '*.did.required' => __('The DID is required.', 'didgeridoo'),
+                '*.did.max' => __('The DID may not be more than 127 characters.', 'didgeridoo'),
             ]
         );
 
