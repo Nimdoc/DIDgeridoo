@@ -35,16 +35,23 @@
         white-space: nowrap
 
     input
-        min-height: 40px
-        box-shadow: 0 0 0 transparent
-        border-radius: 4px
-        border: 1px solid #8c8f94
-        background-color: #fff
-        color: #2c3338
-        width: 100%
+        &[type="text"]
+            min-height: 40px
+            box-shadow: 0 0 0 transparent
+            border-radius: 4px
+            border: 1px solid #8c8f94
+            background-color: #fff
+            color: #2c3338
+            width: 100%
 
-        @media #{$desktop}
-            min-height: 30px
+            @media #{$desktop}
+                min-height: 30px
+
+        &[type="checkbox"]
+            // Make the check bigger
+            transform: scale(2)
+            transform-origin: left
+            margin: 10px 0
 
     .ddoo
         &__container
@@ -130,6 +137,9 @@
         input
             @media #{$desktop}
                 border-radius: 0
+
+            &:disabled 
+                background-color: #f8f9fa
 
         button
             @media #{$desktop}

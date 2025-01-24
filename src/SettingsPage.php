@@ -118,6 +118,7 @@ class SettingsPage
         $response['didgeridoo_subdomain'] = get_option('didgeridoo_subdomain');
         $response['didgeridoo_main_did'] = get_option('didgeridoo_main_did');
         $response['didgeridoo_did_list'] = get_option('didgeridoo_did_list');
+        $response['didgeridoo_enable_org_mode'] = get_option('didgeridoo_enable_org_mode');
 
         //Prepare the response
         $response = new \WP_REST_Response($response);
@@ -144,11 +145,13 @@ class SettingsPage
                 'didgeridoo_subdomain' => ['regex:/^(?![-.])[a-zA-Z0-9.-]+(?<![-.])$/i'],
                 'didgeridoo_main_did' => ['regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'],
                 'didgeridoo_did_list' => ['required', 'json'],
+                'didgeridoo_enable_org_mode' => ['boolean'],
             ],
             [
                 'didgeridoo_subdomain.regex' => __('The subdomain may only contain letters, numbers, dashes, and periods, and may not start or end with a dash or period.', 'didgeridoo'),
                 'didgeridoo_main_did.regex' => __('DID invalid.', 'didgeridoo'),
                 'didgeridoo_did_list'=> __('Something went wrong with the DID list. Please refresh your page.', 'didgeridoo'),
+                'didgeridoo_enable_org_mode.boolean' => __('The organization mode setting must be a boolean.', 'didgeridoo'),
             ]
         );
 
@@ -182,10 +185,13 @@ class SettingsPage
             return $response;
         }
 
+        $validatedData = $validator->validated();
+
         //Get the data and sanitize
-        $didgeridoo_subdomain = sanitize_text_field($request->get_param('didgeridoo_subdomain'));
-        $didgeridoo_main_did = sanitize_text_field($request->get_param('didgeridoo_main_did'));
-        $didgeridoo_did_list_string = sanitize_text_field($request->get_param('didgeridoo_did_list'));
+        $didgeridoo_main_did = $validatedData['didgeridoo_main_did'];
+        $didgeridoo_subdomain = $validatedData['didgeridoo_subdomain'];
+        $didgeridoo_did_list_string = $validatedData['didgeridoo_did_list'];
+        $didgeridoo_enable_org_mode = $validatedData['didgeridoo_enable_org_mode'];
 
         $didgeridoo_did_list = json_decode($didgeridoo_did_list_string, true);
 
@@ -199,6 +205,7 @@ class SettingsPage
         update_option('didgeridoo_subdomain', $didgeridoo_subdomain);
         update_option('didgeridoo_main_did', $didgeridoo_main_did);
         update_option('didgeridoo_did_list', $didgeridoo_did_list_string);
+        update_option('didgeridoo_enable_org_mode', $didgeridoo_enable_org_mode);
 
         $response = new \WP_REST_Response(__('Data successfully added.', 'didgeridoo'), '200');
 

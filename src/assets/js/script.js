@@ -11,6 +11,7 @@ const App = () => {
   const [domainName, setDomainName] = useState("");
   const [didSettings, setDidSettings] = useState([]);
   const [siteDomain, setSiteDomain] = useState("");
+  const [enableOrgMode, setEnableOrgMode] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMessages, setSuccessMessages] = useState({});
 
@@ -24,6 +25,7 @@ const App = () => {
         setMainDid(data["didgeridoo_main_did"]);
         setDomainName(data["didgeridoo_subdomain"]);
         setSiteDomain(data["site_domain"]);
+        setEnableOrgMode(data["didgeridoo_enable_org_mode"] == "1");
 
         // deserialize the didSettings
         const didSettingsList = JSON.parse(data["didgeridoo_did_list"]);
@@ -110,6 +112,8 @@ const App = () => {
               className={`user-table__input ${
                 hasNameErrors && "user-table__input--error"
               }`}
+              type="text"
+              disabled={!enableOrgMode}
               value={setting["name"]}
               onChange={(event) => {
                 let newSettings = [...didSettings];
@@ -135,6 +139,8 @@ const App = () => {
               className={`user-table__input ${
                 hasDidErrors && "user-table__input--error"
               }`}
+              type="text"
+              disabled={!enableOrgMode}
               value={setting["did"]}
               onChange={(event) => {
                 let newSettings = [...didSettings];
@@ -156,6 +162,7 @@ const App = () => {
           <div class="user-table__col">
             <button
               className="user-table__input button button-danger"
+              disabled={!enableOrgMode}
               onClick={() => {
                 let newSettings = didSettings.filter((_, i) => i !== index);
                 setDidSettings(newSettings);
@@ -205,9 +212,27 @@ const App = () => {
         <div className="ddoo__row">
           <input
             className="ddoo_field-single-input"
+            type="text"
             value={mainDid}
             onChange={(event) => {
               setMainDid(event.target.value);
+            }}
+          />
+        </div>
+
+        <div className="ddoo__row ddoo__row--label">
+          <h2>{__('Enable Organization Mode', 'didgeridoo')}</h2>
+          <PopupModal title={__('Organization Mode', 'didgeridoo')}>
+            <p>{__('This will enable the organization mode for the DIDgeridoo plugin.', 'didgeridoo')}</p>
+          </PopupModal>
+        </div>
+
+        <div className="ddoo__row">
+          <input
+            type="checkbox"
+            checked={enableOrgMode}
+            onChange={(event) => {
+              setEnableOrgMode(event.target.checked);
             }}
           />
         </div>
@@ -240,6 +265,8 @@ const App = () => {
           <label>{__('cool-username.', 'didgeridoo')}</label>
           <input
             className="ddoo_field-single-input"
+            type="text"
+            disabled={!enableOrgMode}
             value={domainName}
             onChange={(event) => {
               setDomainName(event.target.value);
@@ -298,6 +325,7 @@ const App = () => {
           <div>
             <button
               className="button button-primary"
+              disabled={!enableOrgMode}
               onClick={() => {
                 setDidSettings([...didSettings, { name: "", did: "" }]);
               }}
@@ -321,6 +349,7 @@ const App = () => {
                   didgeridoo_main_did: mainDid,
                   didgeridoo_subdomain: domainName,
                   didgeridoo_did_list: didSettingsJson,
+                  didgeridoo_enable_org_mode: enableOrgMode,
                 },
               })
                 .then((data) => {
