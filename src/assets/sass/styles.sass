@@ -40,7 +40,6 @@
             box-shadow: 0 0 0 transparent
             border-radius: 4px
             border: 1px solid #8c8f94
-            background-color: #fff
             color: #2c3338
             width: 100%
 
@@ -166,7 +165,7 @@
         &__row
             display: grid
             grid-template-columns: 1fr 80px
-            grid-template-rows: 1fr 1fr 1fr
+            grid-template-rows: auto
 
             @media #{$desktop}
                 grid-template-columns: 1fr 1fr 1fr 80px
@@ -229,7 +228,7 @@
         &__input
             &--error
                 border-color: $danger-color
-                background: $danger-color-soft
+                background-color: $danger-color-soft
 
         &__error-list
             background: $danger-color-soft
