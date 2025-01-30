@@ -188,7 +188,7 @@ const App = () => {
         <div className="ddoo__row ddoo__row--label">
           <h2>{__('Main DID', 'didgeridoo')}</h2>
           <PopupModal title={__('Main DID', 'didgeridoo')}>
-            <p>{__('This is the main DID that will be used for the subdomain.', 'didgeridoo')}</p>
+            <p>{__('This is the main DID that will be used for the domain (Site Address in the settings).', 'didgeridoo')}</p>
           </PopupModal>
         </div>
 
@@ -223,7 +223,8 @@ const App = () => {
         <div className="ddoo__row ddoo__row--label">
           <h2>{__('Enable Organization Mode', 'didgeridoo')}</h2>
           <PopupModal title={__('Organization Mode', 'didgeridoo')}>
-            <p>{__('This will enable the organization mode for the DIDgeridoo plugin.', 'didgeridoo')}</p>
+            <p>{__('This will enable adding multiple user handles in addition to you main website handle. NOTE: You must have a wildcard A record pointed to this Wordpress instance in order to use this feature. Read more about configuring DNS for ATProto below.', 'didgeridoo')}</p>
+            <p><a href="https://atproto.com/guides/self-hosting#configure-dns-for-your-domain" target="_blank">https://atproto.com/guides/self-hosting#configure-dns-for-your-domain</a></p>
           </PopupModal>
         </div>
 
@@ -240,7 +241,8 @@ const App = () => {
         <div className="ddoo__row ddoo__row--label">
           <h2>{__('Subdomain', 'didgeridoo')}</h2>
           <PopupModal title={__('Subdomain', 'didgeridoo')}>
-            <p>{__('This is the subdomain that will be used to generate the user handles.', 'didgeridoo')}</p>
+            <p>{__('Here you may add more labels between your domain and user handle name. You may also leave this field blank. Read more about ATProto handles below.', 'didgeridoo')}</p>
+            <p><a href="https://atproto.com/specs/handle" target="_blank">https://atproto.com/specs/handle</a></p>
           </PopupModal>
         </div>
 
