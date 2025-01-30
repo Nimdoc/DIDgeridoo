@@ -142,16 +142,16 @@ class SettingsPage
         $validator = (new ValidatorFactory($translator, $container))->make(
             $request->get_params(),
             [
-                'didgeridoo_subdomain' => ['regex:/^(?![-.])[a-zA-Z0-9.-]+(?<![-.])$/i'],
                 'didgeridoo_main_did' => ['regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'],
-                'didgeridoo_did_list' => ['required', 'json'],
                 'didgeridoo_enable_org_mode' => ['boolean'],
+                'didgeridoo_subdomain' => ['exclude_if:didgeridoo_enable_org_mode,false', 'regex:/^(?![-.])[a-zA-Z0-9.-]+(?<![-.])$/i'],
+                'didgeridoo_did_list' => ['exclude_if:didgeridoo_enable_org_mode,false', 'required', 'json'],
             ],
             [
                 'didgeridoo_subdomain.regex' => __('The subdomain may only contain letters, numbers, dashes, and periods, and may not start or end with a dash or period.', 'didgeridoo'),
+                'didgeridoo_enable_org_mode.boolean' => __('The organization mode setting must be a boolean.', 'didgeridoo'),
                 'didgeridoo_main_did.regex' => __('DID invalid.', 'didgeridoo'),
                 'didgeridoo_did_list'=> __('Something went wrong with the DID list. Please refresh your page.', 'didgeridoo'),
-                'didgeridoo_enable_org_mode.boolean' => __('The organization mode setting must be a boolean.', 'didgeridoo'),
             ]
         );
 
@@ -160,52 +160,60 @@ class SettingsPage
             return $response;
         }
 
-        $didList = json_decode($request->get_param('didgeridoo_did_list'), true);
+        $enableOrgMode = $validator->safe()->only(['didgeridoo_enable_org_mode'])['didgeridoo_enable_org_mode'];
 
-        $didListValidator = (new ValidatorFactory($translator, $container))->make(
-            $didList,
-            [
-                '*.name' => ['required', 'max:63', 'distinct', 'regex:/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/i'],
-                '*.did' => ['required', 'max:127', 'regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'],
-                '*.last_updated' => ['required', 'date'],
-            ],
-            [
-                '*.name.required' => __('The user handle is required.', 'didgeridoo'),
-                '*.name.max' => __('The user handle may not be more than 63 characters.', 'didgeridoo'),
-                '*.name.distinct' => __('The user handle must be unique.', 'didgeridoo'),
-                '*.name.regex' => __('The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash.', 'didgeridoo'),
-                '*.did.regex' => __('DID invalid.', 'didgeridoo'),
-                '*.did.required' => __('The DID is required.', 'didgeridoo'),
-                '*.did.max' => __('The DID may not be more than 127 characters.', 'didgeridoo'),
-            ]
-        );
+        if ($enableOrgMode) {
+            $didList = json_decode($request->get_param('didgeridoo_did_list'), true);
 
-        if ($didListValidator->fails()) {
-            $response = new \WP_REST_Response($didListValidator->errors()->toArray(), '400');
-            return $response;
+            $didListValidator = (new ValidatorFactory($translator, $container))->make(
+                $didList,
+                [
+                    '*.name' => ['required', 'max:63', 'distinct', 'regex:/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/i'],
+                    '*.did' => ['required', 'max:127', 'regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'],
+                    '*.last_updated' => ['required', 'date'],
+                ],
+                [
+                    '*.name.required' => __('The user handle is required.', 'didgeridoo'),
+                    '*.name.max' => __('The user handle may not be more than 63 characters.', 'didgeridoo'),
+                    '*.name.distinct' => __('The user handle must be unique.', 'didgeridoo'),
+                    '*.name.regex' => __('The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash.', 'didgeridoo'),
+                    '*.did.regex' => __('DID invalid.', 'didgeridoo'),
+                    '*.did.required' => __('The DID is required.', 'didgeridoo'),
+                    '*.did.max' => __('The DID may not be more than 127 characters.', 'didgeridoo'),
+                ]
+            );
+
+            if ($didListValidator->fails()) {
+                $response = new \WP_REST_Response($didListValidator->errors()->toArray(), '400');
+                return $response;
+            }
         }
 
         $validatedData = $validator->validated();
 
         //Get the data and sanitize
         $didgeridoo_main_did = $validatedData['didgeridoo_main_did'];
-        $didgeridoo_subdomain = $validatedData['didgeridoo_subdomain'];
-        $didgeridoo_did_list_string = $validatedData['didgeridoo_did_list'];
         $didgeridoo_enable_org_mode = $validatedData['didgeridoo_enable_org_mode'];
 
-        $didgeridoo_did_list = json_decode($didgeridoo_did_list_string, true);
-
-        // Sort the DID list by name ascending
-        usort($didgeridoo_did_list, function($a, $b) {
-            return $a['name'] <=> $b['name'];
-        });
-
-        $didgeridoo_did_list_string = json_encode($didgeridoo_did_list);
-
-        update_option('didgeridoo_subdomain', $didgeridoo_subdomain);
         update_option('didgeridoo_main_did', $didgeridoo_main_did);
-        update_option('didgeridoo_did_list', $didgeridoo_did_list_string);
         update_option('didgeridoo_enable_org_mode', $didgeridoo_enable_org_mode);
+
+        if ($enableOrgMode) {
+            $didgeridoo_subdomain = $validatedData['didgeridoo_subdomain'];
+            $didgeridoo_did_list_string = $validatedData['didgeridoo_did_list'];
+
+            $didgeridoo_did_list = json_decode($didgeridoo_did_list_string, true);
+
+            // Sort the DID list by name ascending
+            usort($didgeridoo_did_list, function($a, $b) {
+                return $a['name'] <=> $b['name'];
+            });
+
+            $didgeridoo_did_list_string = json_encode($didgeridoo_did_list);
+
+            update_option('didgeridoo_subdomain', $didgeridoo_subdomain);
+            update_option('didgeridoo_did_list', $didgeridoo_did_list_string);
+        }
 
         $response = new \WP_REST_Response(__('Data successfully added.', 'didgeridoo'), '200');
 
