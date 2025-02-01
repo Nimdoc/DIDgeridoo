@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ******************************************************************************
  * Copyright (c) 2025 Tom Busby
@@ -23,17 +24,17 @@ class WellKnownRouteResolver
 {
     public function __construct()
     {
-        add_action('init', [$this, 'add_rewrite_rules']);
-        add_action('template_redirect', [$this, 'handle_well_known_request']);
+        add_action('init', [$this, 'addRewriteRules']);
+        add_action('template_redirect', [$this, 'handleWellKnownRequest']);
     }
 
-    function add_rewrite_rules()
+    function addRewriteRules()
     {
         add_rewrite_rule('^.well-known/atproto-did?$', 'index.php?well_known_atproto_did=1', 'top');
         add_rewrite_tag('%well_known_atproto_did%', '([^&]+)');
     }
 
-    public function handle_well_known_request()
+    public function handleWellKnownRequest()
     {
         if (!get_query_var('well_known_atproto_did')) {
             return;
@@ -50,18 +51,8 @@ class WellKnownRouteResolver
             exit;
         }
 
-        $didList = get_option('didgeridoo_did_list');
-        $didList = json_decode($didList, true);
-
-        // Something is wrong with the stored DID list
-        if (!is_array($didList)) {
-            status_header(500);
-            echo "Internal server error. If you are the owner of this domain, please resave your DID settings.\n";
-            exit;
-        }
-
         $handleParts = explode('.', $httpHost);
-        $name = $handleParts[0];
+        $startingLabel = $handleParts[0];
         $domain = implode('.', array_slice($handleParts, 1));
         $didgeridooSubdomain = get_option('didgeridoo_subdomain');
 
@@ -74,12 +65,16 @@ class WellKnownRouteResolver
         if ($httpHost === $siteDomain) {
             $did = get_option('didgeridoo_main_did');
         } else if ($domain === $userSubdomain) {
-            $userSetting = $this->array_find($didList, function($value) use ($name) {
-                return $value['name'] === $name;
-            });
+            $users = get_users([
+                'meta_key' => 'didgeridoo_user_label',
+                'meta_value' => $startingLabel,
+            ]);
 
-            $did = $userSetting['did'] ?? false;
-        } 
+            if ($users) {
+                $user = $users[0];
+                $did = get_user_meta($user->ID, 'didgeridoo_user_did', true);
+            }
+        }
 
         if (empty($did)) {
             status_header(404);
@@ -93,21 +88,5 @@ class WellKnownRouteResolver
         echo $did;
         echo "\n";
         exit;
-    }
-
-    /**
-     * PHP 8.0 has array_find, but we need to support PHP 7.4 for WordPress
-     * @param array $array
-     * @param callable $callback
-     * @return mixed|null
-     */
-    private function array_find($array, $callback)
-    {
-        foreach ($array as $key => $value) {
-            if ($callback($value, $key)) {
-                return $value;
-            }
-        }
-        return null;
     }
 }

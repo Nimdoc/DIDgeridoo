@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ******************************************************************************
  * Copyright (c) 2025 Tom Busby
@@ -17,35 +18,25 @@
  * ******************************************************************************
  */
 
-/*
-Plugin Name: Didgeridoo
-Plugin URI: http://example.com/
-Description: Manage ATProto DIDs for your domain.
-Version: 1.0
-Author: Tom Busby
-Author URI: https://nimdok.io
-Text Domain: didgeridoo
-License: EPL-2.0
-*/
+namespace Didgeridoo;
 
-// Prevent direct access to the file
-if (!defined('ABSPATH')) {
-    exit;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+
+class UniqueWPUserLabel implements ValidationRule
+{
+    public function validate(string $attribute, mixed $value, Closure $fail): void
+    {
+        $currentUser = wp_get_current_user();
+
+        $users = get_users([
+            'meta_key' => 'didgeridoo_user_label',
+            'meta_value' => $value,
+            'exclude' => $currentUser->ID,
+        ]);
+
+        if (count($users) > 0) {
+            $fail(__('The user handle is already taken.', 'didgeridoo'));
+        }
+    }
 }
-
-// Include the Composer autoload file
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Didgeridoo\SettingsPage;
-use Didgeridoo\WellKnownRouteResolver;
-use Didgeridoo\UserProfile;
-
-$settingsPage = new SettingsPage();
-$wellKnownRouteResolver = new WellKnownRouteResolver();
-$userProfile = new UserProfile();
-
-function loadDidgeridooTextdomain() {
-    $pluginRelativePath = basename(dirname(__FILE__)) . '/languages';
-	load_plugin_textdomain('didgeridoo', false, $pluginRelativePath);
-}
-add_action('plugins_loaded', 'loadDidgeridooTextdomain');
