@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ******************************************************************************
  * Copyright (c) 2025 Tom Busby
@@ -44,8 +45,9 @@ $settingsPage = new SettingsPage();
 $wellKnownRouteResolver = new WellKnownRouteResolver();
 $userProfile = new UserProfile();
 
-function loadDidgeridooTextdomain() {
+function loadDidgeridooTextdomain()
+{
     $pluginRelativePath = basename(dirname(__FILE__)) . '/languages';
-	load_plugin_textdomain('didgeridoo', false, $pluginRelativePath);
+    load_plugin_textdomain('didgeridoo', false, $pluginRelativePath);
 }
 add_action('plugins_loaded', 'loadDidgeridooTextdomain');
