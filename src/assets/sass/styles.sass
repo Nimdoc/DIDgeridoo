@@ -129,10 +129,8 @@
                 > *:not(:first-child)
                     margin-left: math.div($spacing, 2)
 
-        &__sort
-            display: flex
-            flex-flow: column
-            align-items: end
+        &__test-button
+            margin-left: auto
 
         &__button-close
             position: relative
@@ -147,125 +145,6 @@
             &--error
                 &::before
                     color: $danger-color
-
-    .user-table
-        display: flex
-        flex-flow: column
-        width: 100%
-
-        input
-            @media #{$desktop}
-                border-radius: 0
-
-            &:disabled 
-                background-color: #f8f9fa
-
-        button
-            @media #{$desktop}
-                border-radius: 0
-
-        &__label
-            display: flex
-            flex-flow: row
-            justify-content: space-between
-            align-items: center
-            margin-bottom: math.div($spacing, 4)
-
-            @media #{$desktop}
-                display: none
-
-        &__last-updated
-            display: flex
-            align-items: center
-            justify-content: center
-
-            @media #{$desktop}
-                border-left: 1px solid rgb(140, 143, 148)
-
-        &__row
-            display: grid
-            grid-template-columns: 1fr 80px
-            grid-template-rows: auto
-
-            @media #{$desktop}
-                grid-template-columns: 1fr 1fr 1fr 80px
-                grid-template-rows: 1fr
-
-            &--header
-                display: none
-                
-                @media #{$desktop}
-                    display: grid
-
-            &--error
-                background: $danger-color-soft
-                color: $danger-color
-
-            @media #{$desktop}
-                > * input:first-child
-                    border-right: 0
-
-                &:first-child > :first-child > *
-                    border-top-left-radius: 4px
-
-                &:first-child > :last-child > *
-                    border-top-right-radius: 4px
-
-                &:last-child > :first-child > *
-                    border-bottom-left-radius: 4px
-
-                &:last-child > :last-child > *
-                    border-bottom-right-radius: 4px
-
-        &__col
-            position: relative
-            display: flex
-            flex-flow: column
-            justify-content: center
-            margin-bottom: math.div($spacing, 2)
-
-            @media #{$desktop}
-                margin-bottom: 0
-
-            &--name, &--did
-                grid-column: span 2
-
-                @media #{$desktop}
-                    grid-column: span 1
-
-            &:hover
-                .user-table__error-list
-                    display: block
-
-        &__body
-            > *:not(:first-child)
-                margin-top: math.div($spacing, 4)
-
-            &--error
-                border-color: $danger-color
-                background: $danger-color-soft
-
-        &__input
-            &--error
-                border-color: $danger-color
-                background-color: $danger-color-soft
-
-        &__error-list
-            background: $danger-color-soft
-            margin-bottom: math.div($spacing, 2)
-            padding: math.div($spacing, 2)
-            
-            @media #{$desktop}
-                top: 0
-                left: 0
-                right: 0
-                position: absolute
-                display: none
-                padding: math.div($spacing, 2)
-                transform: translateY(-100%)
-
-                &:hover
-                    display: block
 
     .modal
         &__open-button

@@ -166,6 +166,27 @@ const App = () => {
               </a>
             </p>
           </PopupModal>
+          <button
+            className="button button-primary ddoo__test-button"
+            onClick={() => {
+              wp.apiFetch({
+                path: "/didgeridoo/v1/test-dns",
+                method: "POST",
+                data: {
+                  didgeridoo_subdomain: domainName,
+                },
+              })
+                .then((data) => {
+                  setSuccessMessages({ success: data });
+                })
+                .catch((error) => {
+                  setErrors(error);
+                  setSuccessMessages({});
+                });
+            }}
+          >
+            Test Subdomain
+          </button>
         </div>
 
         {errors["didgeridoo_subdomain"] && (
@@ -230,7 +251,7 @@ const App = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  const rootElement = document.getElementById("name-id-list");
+  const rootElement = document.getElementById("didgeridoo-settings");
   if (rootElement) {
     const root = createRoot(rootElement);
     root.render(<App />);

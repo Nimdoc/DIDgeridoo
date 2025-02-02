@@ -23,13 +23,14 @@ namespace Didgeridoo;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Translation\Translator;
 use Illuminate\Container\Container;
+use WP_Error;
 
 class SettingsPage
 {
     public function __construct()
     {
         add_action('admin_enqueue_scripts', [$this, 'enqueueScripts']);
-        add_action(('admin_enqueue_scripts'), [$this, 'enqueueStyles']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueueStyles']);
         add_action('admin_menu', [$this, 'addAdminMenu']);
 
         add_option('didgeridoo_subdomain', '');
@@ -83,7 +84,7 @@ class SettingsPage
     {
 ?>
         <div class="wrap">
-            <div id="name-id-list"></div>
+            <div id="didgeridoo-settings"></div>
         </div>
 <?php
     }
@@ -109,6 +110,16 @@ class SettingsPage
                 'permission_callback' => '__return_true'
             ]
         );
+
+        register_rest_route(
+            'didgeridoo/v1',
+            '/test-dns',
+            [
+                'methods'             => 'POST',
+                'callback'            => [$this, 'settingsPageTestDNSCallback'],
+                'permission_callback' => '__return_true'
+            ]
+        );
     }
 
     function settingsPageReadOptionsCallback($data)
@@ -117,7 +128,7 @@ class SettingsPage
         if (!current_user_can('manage_options')) {
             return new \WP_Error(
                 'rest_read_error',
-                'Sorry, you are not allowed to view the options.',
+                __('Sorry, you are not allowed to update the DIDgeridoo options.', 'didgeridoo'),
                 ['status' => 403]
             );
         }
@@ -158,13 +169,11 @@ class SettingsPage
                 'didgeridoo_main_did' => ['regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'],
                 'didgeridoo_enable_org_mode' => ['boolean'],
                 'didgeridoo_subdomain' => ['exclude_if:didgeridoo_enable_org_mode,false', 'regex:/^(?![-.])[a-zA-Z0-9.-]+(?<![-.])$/i'],
-                'didgeridoo_did_list' => ['exclude_if:didgeridoo_enable_org_mode,false', 'required', 'json'],
             ],
             [
                 'didgeridoo_subdomain.regex' => __('The subdomain may only contain letters, numbers, dashes, and periods, and may not start or end with a dash or period.', 'didgeridoo'),
                 'didgeridoo_enable_org_mode.boolean' => __('The organization mode setting must be a boolean.', 'didgeridoo'),
                 'didgeridoo_main_did.regex' => __('DID invalid.', 'didgeridoo'),
-                'didgeridoo_did_list' => __('Something went wrong with the DID list. Please refresh your page.', 'didgeridoo'),
             ]
         );
 
@@ -187,5 +196,61 @@ class SettingsPage
         $response = new \WP_REST_Response(__('Data successfully added.', 'didgeridoo'), '200');
 
         return $response;
+    }
+
+    function settingsPageTestDNSCallback($request)
+    {
+        // Check the capability
+        if (!current_user_can('manage_options')) {
+            return new \WP_Error(
+                'rest_read_error',
+                __('Sorry, you are not allowed to update the DIDgeridoo options.', 'didgeridoo'),
+                ['status' => 403]
+            );
+        }
+
+        $translator = new Translator(new \Illuminate\Translation\ArrayLoader(), 'en');
+        $container = new Container();
+        $validator = (new ValidatorFactory($translator, $container))->make(
+            $request->get_params(),
+            [
+                'didgeridoo_subdomain' => ['exclude_if:didgeridoo_enable_org_mode,false', 'regex:/^(?![-.])[a-zA-Z0-9.-]+(?<![-.])$/i'],
+            ],
+            [
+                'didgeridoo_subdomain.regex' => __('The subdomain may only contain letters, numbers, dashes, and periods, and may not start or end with a dash or period.', 'didgeridoo'),
+            ]
+        );
+
+        if ($validator->fails()) {
+            $response = new \WP_REST_Response($validator->errors()->toArray(), '400');
+            return $response;
+        }
+
+        $didgeridooSubdomain = $validator->validated()['didgeridoo_subdomain'];
+
+        $siteUrl = get_site_url();
+        $urlParts = parse_url($siteUrl);
+        $siteDomain = $urlParts['host'];
+
+        // Using an invalid user handle to test the DNS at the specified __test subdomain
+        $urlToCheck = '__test' . $didgeridooSubdomain . '.' . $siteDomain;
+
+        $response = wp_remote_get($urlToCheck);
+
+        if (is_wp_error($response)) {
+            return new \WP_REST_Response(['didgeridoo_subdomain' => [
+                __('The URL is not reachable.', 'didgeridoo')
+            ]], '400');
+        }
+
+        $response_code = wp_remote_retrieve_response_code($response);
+
+        if ($response_code == 200) {
+            return new \WP_REST_Response(__('Subdomain is reachable.', 'didgeridoo'), '200');
+        } else {
+            return new \WP_REST_Response(['didgeridoo_subdomain' => [
+                __('The URL is not reachable.', 'didgeridoo')
+            ]], '400');
+        }
     }
 }
