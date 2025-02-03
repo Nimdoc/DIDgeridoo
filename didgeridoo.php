@@ -19,7 +19,7 @@
  */
 
 /*
-Plugin Name: Didgeridoo
+Plugin Name: DIDgeridoo
 Plugin URI: http://example.com/
 Description: Manage ATProto DIDs for your domain.
 Version: 1.0
