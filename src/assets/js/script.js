@@ -33,6 +33,7 @@ const App = () => {
   const [enableOrgMode, setEnableOrgMode] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMessages, setSuccessMessages] = useState({});
+  const [permalinkStructure, setPermalinkStructure] = useState("unset");
 
   useEffect(() => {
     /**
@@ -45,6 +46,7 @@ const App = () => {
         setDomainName(data["didgeridoo_subdomain"]);
         setSiteDomain(data["site_domain"]);
         setEnableOrgMode(data["didgeridoo_enable_org_mode"] == "1");
+        setPermalinkStructure(data["permalink_structure"]);
       })
       .catch((error) => {
         console.error(error);
@@ -73,12 +75,27 @@ const App = () => {
     );
   });
 
+  console.log(permalinkStructure);
+
   return (
     <div className="didgeridoo">
       <div className="ddoo__container">
         <div className="ddoo__row">
           <h1>{__("DIDgeridoo Settings", "didgeridoo")}</h1>
         </div>
+
+        {!permalinkStructure && (
+          <div className="ddoo__row ddoo__row--error">
+            <ul>
+              <li>
+                {__(
+                  'The Permalink structure is set to "Plain" in the WordPress settings. Please change it to another structure, otherwise this plugin may not work properly.',
+                  "didgeridoo"
+                )}
+              </li>
+            </ul>
+          </div>  
+        )}
 
         {successMessagesList}
 

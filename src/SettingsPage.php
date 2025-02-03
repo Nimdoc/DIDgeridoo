@@ -144,6 +144,8 @@ class SettingsPage
         $response['didgeridoo_did_list'] = get_option('didgeridoo_did_list');
         $response['didgeridoo_enable_org_mode'] = get_option('didgeridoo_enable_org_mode');
 
+        $response['permalink_structure'] = get_option('permalink_structure');
+
         //Prepare the response
         $response = new \WP_REST_Response($response);
 
