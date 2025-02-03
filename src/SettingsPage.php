@@ -231,7 +231,7 @@ class SettingsPage
         $urlParts = parse_url($siteUrl);
         $siteDomain = $urlParts['host'];
 
-        $urlToCheck = 'didgeridoo-test' . $didgeridooSubdomain . '.' . $siteDomain . '/.well-known/atproto-did';
+        $urlToCheck = (is_ssl() ? "https://" : "http://") . 'didgeridoo-test' . $didgeridooSubdomain . '.' . $siteDomain . '/.well-known/atproto-did';
 
         $response = wp_remote_get($urlToCheck);
 
