@@ -168,6 +168,7 @@ const App = () => {
           </PopupModal>
           <button
             className="button button-primary ddoo__test-button"
+            disabled={!enableOrgMode}
             onClick={() => {
               wp.apiFetch({
                 path: "/didgeridoo/v1/test-dns",

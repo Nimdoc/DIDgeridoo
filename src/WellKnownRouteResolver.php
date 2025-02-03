@@ -66,7 +66,7 @@ class WellKnownRouteResolver
             $did = get_option('didgeridoo_main_did');
         } else if ($domain === $userSubdomain) {
             // This is for verifying the DIDgeridoo settings.
-            if ($startingLabel === '__test') {
+            if ($startingLabel === 'didgeridoo-test') {
                 status_header(200);
                 header('Content-Type: text/plain');
                 echo "Success\n";

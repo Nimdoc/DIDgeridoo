@@ -7,95 +7,117 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-01-22T22:15:21+00:00\n"
+"POT-Creation-Date: 2025-02-02T19:53:57+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: didgeridoo\n"
 
-#: SettingsPage.php:149
+#: SettingsPage.php:131
+#: SettingsPage.php:159
+#: SettingsPage.php:207
+msgid "Sorry, you are not allowed to update the DIDgeridoo options."
+msgstr ""
+
+#: SettingsPage.php:174
+#: SettingsPage.php:220
 msgid "The subdomain may only contain letters, numbers, dashes, and periods, and may not start or end with a dash or period."
 msgstr ""
 
-#: SettingsPage.php:150
-#: SettingsPage.php:170
+#: SettingsPage.php:175
+msgid "The organization mode setting must be a boolean."
+msgstr ""
+
+#: SettingsPage.php:176
 msgid "DID invalid."
 msgstr ""
 
-#: SettingsPage.php:151
-msgid "Something went wrong with the DID list. Please refresh your page."
+#: SettingsPage.php:196
+msgid "Data successfully added."
 msgstr ""
 
-#: SettingsPage.php:169
-msgid "The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash."
+#: SettingsPage.php:242
+#: SettingsPage.php:252
+msgid "The URL is not reachable."
 msgstr ""
 
-#: SettingsPage.php:171
+#: SettingsPage.php:249
+msgid "Subdomain is reachable."
+msgstr ""
+
+#: UniqueWPUserLabel.php:39
+msgid "The user handle is already taken."
+msgstr ""
+
+#: UserProfile.php:51
+msgid "The user handle may not be more than 63 characters."
+msgstr ""
+
+#: UserProfile.php:52
 msgid "The user handle must be unique."
 msgstr ""
 
-#: assets/js/script.js:101
-#: assets/js/script.js:277
-msgid "User Handle"
+#: UserProfile.php:53
+msgid "The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash."
 msgstr ""
 
-#: assets/js/script.js:126
-#: assets/js/script.js:278
-msgid "DID"
+#: UserProfile.php:54
+msgid "The DID may not be more than 127 characters."
 msgstr ""
 
-#: assets/js/script.js:151
-#: assets/js/script.js:279
-msgid "Last Updated"
+#: UserProfile.php:55
+msgid "The DID is invalid."
 msgstr ""
 
-#: assets/js/script.js:163
-msgid "Remove"
+#: UserProfile.php:79
+msgid "ATProto DID Settings"
 msgstr ""
 
-#: assets/js/script.js:175
+#: UserProfile.php:93
+msgid "Please enter user handle"
+msgstr ""
+
+#: UserProfile.php:106
+msgid "Please enter your DID"
+msgstr ""
+
+#: assets/js/script.js:80
 msgid "DIDgeridoo Settings"
 msgstr ""
 
-#: assets/js/script.js:181
+#: assets/js/script.js:86
+#: assets/js/script.js:87
 msgid "Main DID"
 msgstr ""
 
-#: assets/js/script.js:212
+#: assets/js/script.js:89
+msgid "This is the main DID that will be used for the domain (Site Address in the settings)."
+msgstr ""
+
+#: assets/js/script.js:125
+msgid "Enable Organization Mode"
+msgstr ""
+
+#: assets/js/script.js:126
+msgid "Organization Mode"
+msgstr ""
+
+#: assets/js/script.js:128
+msgid "This will enable adding multiple user handles in addition to you main website handle. NOTE: You must have a wildcard A record pointed to this Wordpress instance in order to use this feature. Read more about configuring DNS for ATProto below."
+msgstr ""
+
+#: assets/js/script.js:155
+#: assets/js/script.js:156
 msgid "Subdomain"
 msgstr ""
 
-#: assets/js/script.js:233
+#: assets/js/script.js:158
+msgid "Here you may add more labels between your domain and user handle name. You may also leave this field blank. Read more about ATProto handles below."
+msgstr ""
+
+#: assets/js/script.js:209
 msgid "cool-username."
 msgstr ""
 
 #: assets/js/script.js:245
-msgid "DID User Handle Settings"
-msgstr ""
-
-#: assets/js/script.js:247
-msgid "Sort by"
-msgstr ""
-
-#: assets/js/script.js:249
-msgid "Sort by Name Asc."
-msgstr ""
-
-#: assets/js/script.js:250
-msgid "Sort by Name Desc."
-msgstr ""
-
-#: assets/js/script.js:251
-msgid "Sort by Date Asc."
-msgstr ""
-
-#: assets/js/script.js:252
-msgid "Sort by Date Desc."
-msgstr ""
-
-#: assets/js/script.js:293
-msgid "Add User"
-msgstr ""
-
-#: assets/js/script.js:324
 msgid "Save"
 msgstr ""

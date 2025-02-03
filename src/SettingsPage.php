@@ -232,8 +232,7 @@ class SettingsPage
         $urlParts = parse_url($siteUrl);
         $siteDomain = $urlParts['host'];
 
-        // Using an invalid user handle to test the DNS at the specified __test subdomain
-        $urlToCheck = '__test' . $didgeridooSubdomain . '.' . $siteDomain;
+        $urlToCheck = 'didgeridoo-test' . $didgeridooSubdomain . '.' . $siteDomain . '/.well-known/atproto-did';
 
         $response = wp_remote_get($urlToCheck);
 
