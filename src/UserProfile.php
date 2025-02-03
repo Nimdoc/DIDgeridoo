@@ -29,12 +29,16 @@ class UserProfile
 {
     public function __construct()
     {
-        add_action('show_user_profile', [$this, 'userProfileFields']);
-        add_action('edit_user_profile', [$this, 'userProfileFields']);
-        add_action('personal_options_update', [$this, 'saveUserProfileFields']);
-        add_action('edit_user_profile_update', [$this, 'saveUserProfileFields']);
+        $enableOrgMode = get_option('didgeridoo_enable_org_mode');
 
-        add_action('user_profile_update_errors', [$this, 'validateUserProfileFields'], 10, 3);
+        if ($enableOrgMode) {
+            add_action('show_user_profile', [$this, 'userProfileFields']);
+            add_action('edit_user_profile', [$this, 'userProfileFields']);
+            add_action('personal_options_update', [$this, 'saveUserProfileFields']);
+            add_action('edit_user_profile_update', [$this, 'saveUserProfileFields']);
+
+            add_action('user_profile_update_errors', [$this, 'validateUserProfileFields'], 10, 3);
+        }
     }
 
     public function validateUserProfileFields(\WP_Error $errors, $update, $user)
