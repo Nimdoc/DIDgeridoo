@@ -202,6 +202,9 @@ const App = () => {
               })
                 .then((data) => {
                   setSuccessMessages({ success: data });
+                  const updatedErrors = { ...errors };
+                  delete updatedErrors.didgeridoo_subdomain;
+                  setErrors(updatedErrors);
                 })
                 .catch((error) => {
                   setErrors(error);
