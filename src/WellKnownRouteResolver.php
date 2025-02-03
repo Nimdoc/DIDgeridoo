@@ -62,16 +62,17 @@ class WellKnownRouteResolver
 
         $userSubdomain = ($didgeridooSubdomain ? $didgeridooSubdomain . '.' : '') . $siteDomain;
 
-        if ($httpHost === $siteDomain) {
+        if ($startingLabel === 'didgeridoo-test') {
+            // This is for verifying the DIDgeridoo subdomain settings.
+            // The front label is `didgeridoo-test`, 200 needs to be returned
+            // because the subdomain might not yet be saved in the settings.
+            status_header(200);
+            header('Content-Type: text/plain');
+            echo "Success\n";
+            exit;
+        } else if ($httpHost === $siteDomain) {
             $did = get_option('didgeridoo_main_did');
         } else if ($domain === $userSubdomain) {
-            // This is for verifying the DIDgeridoo settings.
-            if ($startingLabel === 'didgeridoo-test') {
-                status_header(200);
-                header('Content-Type: text/plain');
-                echo "Success\n";
-                exit;
-            }
 
             $users = get_users([
                 'meta_key' => 'didgeridoo_user_label',

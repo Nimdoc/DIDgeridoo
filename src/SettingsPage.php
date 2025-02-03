@@ -194,7 +194,7 @@ class SettingsPage
         update_option('didgeridoo_enable_org_mode', $didgeridoo_enable_org_mode);
         update_option('didgeridoo_subdomain', $didgeridoo_subdomain);
 
-        $response = new \WP_REST_Response(__('Data successfully added.', 'didgeridoo'), '200');
+        $response = new \WP_REST_Response(__('Settings saved.', 'didgeridoo'), '200');
 
         return $response;
     }
@@ -233,7 +233,7 @@ class SettingsPage
         $urlParts = parse_url($siteUrl);
         $siteDomain = $urlParts['host'];
 
-        $urlToCheck = (is_ssl() ? "https://" : "http://") . 'didgeridoo-test' . $didgeridooSubdomain . '.' . $siteDomain . '/.well-known/atproto-did';
+        $urlToCheck = (is_ssl() ? "https://" : "http://") . 'didgeridoo-test' . ($didgeridooSubdomain ? '.' . $didgeridooSubdomain : '') . '.' . $siteDomain . '/.well-known/atproto-did';
 
         $response = wp_remote_get($urlToCheck);
 

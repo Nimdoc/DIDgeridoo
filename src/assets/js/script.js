@@ -94,7 +94,7 @@ const App = () => {
                 )}
               </li>
             </ul>
-          </div>  
+          </div>
         )}
 
         {successMessagesList}
@@ -181,6 +181,12 @@ const App = () => {
               <a href="https://atproto.com/specs/handle" target="_blank">
                 https://atproto.com/specs/handle
               </a>
+            </p>
+            <p>
+              {__(
+                "WARNING: Changing this field will make users who have already created a handle with the old subdomain unable to access their handle. Be careful when changing this field.",
+                "didgeridoo"
+              )}
             </p>
           </PopupModal>
           <button

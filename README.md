@@ -20,7 +20,7 @@ This guide appies mainly to Bluesky, but this process may also work for other ap
 
 6. Go back to your WordPress admin section, go to Settings > DIDgeridoo, and paste your DID in the field under "Main DID", then click "Save"
 
-7. Then go back to Bluesky and click "Verify Text File"
+7. Then go back to Bluesky and click "Verify Text File", and then click "Update to [Your new user handle]"
 
 Then your Bluesky account should be using the domain from your WordPress site as your handle.
 
