@@ -4,17 +4,21 @@ This is a WordPress plugin that lets you manage your DID for your website and op
 
 ## How to do it
 
+This guide appies mainly to Bluesky, but this process may also work for other apps that are built on ATProto in the future.
+
 ### Main Domain DID
 
-1. Install this plugin either through WordPress plugins or by manually uploading a release to your WordPress site.
+1. Make sure that your permalink structure is set to something other than "plain" in Settings > Permalinks, otherwise this plugin WILL NOT WORK.
 
-2. For Bluesky, in the Settings menu, click on Account > Handle > I have my own domain > No DNS Panel
+2. Install this plugin either through WordPress plugins or by manually uploading a release to your WordPress site, then activate it.
 
-3. Type in the domain of your WordPress site, as it appears in the WordPress General Settings under Site Address, but without the protocol (Without `http://` or `https://`)
+3. Open Bluesky, in the Settings menu, click on Account > Handle > I have my own domain > No DNS Panel
 
-4. Copy the DID at the bottom. It will look something like `did:plc:test:example`
+4. Type in the domain of your WordPress site, as it appears in the WordPress General Settings under Site Address, but without the protocol (Without `http://` or `https://`)
 
-5. Go back to your WordPress admin section, go to Settings > DIDgeridoo, and paste your DID in the field under "Main DID"
+5. Copy the DID at the bottom. It will look something like `did:plc:test:example`
+
+6. Go back to your WordPress admin section, go to Settings > DIDgeridoo, and paste your DID in the field under "Main DID"
 
 ### Organization Mode (Advanced)
 

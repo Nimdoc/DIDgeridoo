@@ -25,8 +25,6 @@ use Illuminate\Translation\Translator;
 use Illuminate\Container\Container;
 use Closure;
 
-use Didgeridoo\UniqueWPUserLabel;
-
 class UserProfile
 {
     public function __construct()

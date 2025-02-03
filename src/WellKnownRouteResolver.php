@@ -70,6 +70,7 @@ class WellKnownRouteResolver
                 status_header(200);
                 header('Content-Type: text/plain');
                 echo "Success\n";
+                exit;
             }
 
             $users = get_users([

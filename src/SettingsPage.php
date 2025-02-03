@@ -23,7 +23,6 @@ namespace Didgeridoo;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Translation\Translator;
 use Illuminate\Container\Container;
-use WP_Error;
 
 class SettingsPage
 {
