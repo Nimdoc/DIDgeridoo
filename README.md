@@ -55,7 +55,25 @@ cool-user.bsky.users.example.com
 
 You can then click the "Test Subdomain" button to check that your WordPress site is reachable with your Subdomain settings.
 
-Users can then specify what handle they want and their DID in the WordPress admin section in their profiles under "ATProto DID Settings."
+#### User Handles in Organization Mode
+
+Creating a user handle is similar to changing the main handle of the domain above.
+
+1. (Admin) Make sure the plugin is installed, the A records have been added, and the permalinks are correctly configured, and that organization mode is enabled.
+
+2. Go to the WordPress administration section and go to your profile by click on the top right on your name.
+
+3. Go to the "ATProto DID Settings" in your profile, and fill in your desired user handle.
+
+3. Open Bluesky, then in the Settings menu, click on Account > Handle > I have my own domain > No DNS Panel
+
+4. Fill in the handle that you want to use under "Enter the domain you want to use"
+
+5. Copy the DID at the bottom. It will look something like `did:plc:test:example`
+
+6. Go back to your profile on your WordPress site and paste the DID in the DID field, then click "Update Profile"
+
+7. Then go back to Bluesky and click "Verify Text File" and then click "Update to [Your new user handle]"
 
 ## Development
 
