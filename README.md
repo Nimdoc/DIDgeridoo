@@ -12,13 +12,17 @@ This guide appies mainly to Bluesky, but this process may also work for other ap
 
 2. Install this plugin either through WordPress plugins or by manually uploading a release to your WordPress site, then activate it.
 
-3. Open Bluesky, in the Settings menu, click on Account > Handle > I have my own domain > No DNS Panel
+3. Open Bluesky, then in the Settings menu, click on Account > Handle > I have my own domain > No DNS Panel
 
 4. Type in the domain of your WordPress site, as it appears in the WordPress General Settings under Site Address, but without the protocol (Without `http://` or `https://`)
 
 5. Copy the DID at the bottom. It will look something like `did:plc:test:example`
 
-6. Go back to your WordPress admin section, go to Settings > DIDgeridoo, and paste your DID in the field under "Main DID"
+6. Go back to your WordPress admin section, go to Settings > DIDgeridoo, and paste your DID in the field under "Main DID", then click "Save"
+
+7. Then go back to Bluesky and click "Verify Text File"
+
+Then your Bluesky account should be using the domain from your WordPress site as your handle.
 
 ### Organization Mode (Advanced)
 
@@ -31,7 +35,7 @@ For example:
 
 Once you have this A record, you can go back to the WordPress Admin section, then back to Settings > DIDgeridoo, and check the "Enable Organization Mode" checkbox.
 
-By default, the user label will just be prepended to the WordPress Site Address. For example, if the A record would be `*.example.com`:
+By default, the user label will just be prepended to the WordPress Site Address. For example, if the A record would be `*.example.com`, then handles would look like:
 
 ```
 tom.example.com
