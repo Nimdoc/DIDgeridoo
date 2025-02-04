@@ -20,6 +20,7 @@
 
 namespace DIDgeridoo;
 
+use Illuminate\Validation\Validator;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Translation\Translator;
 use Illuminate\Container\Container;
@@ -47,41 +48,7 @@ class UserProfile
             return false;
         }
 
-        $translator = new Translator(new \Illuminate\Translation\ArrayLoader(), 'en');
-        $container = new Container();
-        $validator = (new ValidatorFactory($translator, $container))->make(
-            $_POST,
-            [
-                'didgeridoo_user_label' => [
-                    'max:63',
-                    'not_in:didgeridoo-test',
-                    'regex:/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/i',
-                    function (string $attribute, mixed $value, Closure $fail) use ($user) {
-                        $usersWithLabel = get_users([
-                            'meta_key' => 'didgeridoo_user_label',
-                            'meta_value' => $value,
-                            'exclude' => $user->ID,
-                        ]);
-
-                        if (count($usersWithLabel) > 0) {
-                            $fail(__('The user handle is already taken.', 'didgeridoo'));
-                        }
-                    },
-                ],
-                'didgeridoo_user_did' => [
-                    'max:127',
-                    'regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'
-                ],
-            ],
-            [
-                'didgeridoo_user_label.max' =>          __('The user handle may not be more than 63 characters.', 'didgeridoo'),
-                'didgeridoo_user_label.not_in' =>       __('The user handle is reserved.', 'didgeridoo'),
-                'didgeridoo_user_label.distinct' =>     __('The user handle must be unique.', 'didgeridoo'),
-                'didgeridoo_user_label.regex' =>        __('The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash.', 'didgeridoo'),
-                'didgeridoo_user_did.max' =>            __('The DID may not be more than 127 characters.', 'didgeridoo'),
-                'didgeridoo_user_did.regex' =>          __('The DID is invalid.', 'didgeridoo'),
-            ]
-        );
+        $validator = $this->getPostDataValidator($user->ID);
 
         foreach ($validator->errors()->toArray() as $field => $errorList) {
             foreach ($errorList as $error) {
@@ -139,16 +106,63 @@ class UserProfile
     }
 
 
-    public function saveUserProfileFields($user_id)
+    public function saveUserProfileFields($userId)
     {
-        if (!current_user_can('edit_user', $user_id) || !check_admin_referer('update-user_' . $user_id)) {
+        if (!current_user_can('edit_user', $userId) || !check_admin_referer('update-user_' . $userId)) {
             return false;
         }
 
-        $userLabel = !empty($_POST['didgeridoo_user_label']) ? sanitize_text_field(wp_unslash($_POST['didgeridoo_user_label'])) : '';
-        $userDID = !empty($_POST['didgeridoo_user_did']) ? sanitize_text_field(wp_unslash($_POST['didgeridoo_user_did'])) : '';
+        $validator = $this->getPostDataValidator($userId);
 
-        update_user_meta($user_id, 'didgeridoo_user_label', $userLabel);
-        update_user_meta($user_id, 'didgeridoo_user_did', $userDID);
+        if ($validator->fails()) {
+            return false;
+        }
+
+        $userLabel = $validator->validated()['didgeridoo_user_label'];
+        $userDID = $validator->validated()['didgeridoo_user_did'];
+
+        update_user_meta($userId, 'didgeridoo_user_label', $userLabel);
+        update_user_meta($userId, 'didgeridoo_user_did', $userDID);
+    }
+
+    private function getPostDataValidator($userId): Validator
+    {
+        $translator = new Translator(new \Illuminate\Translation\ArrayLoader(), 'en');
+        $container = new Container();
+        $validator = (new ValidatorFactory($translator, $container))->make(
+            $_POST,
+            [
+                'didgeridoo_user_label' => [
+                    'max:63',
+                    'not_in:didgeridoo-test',
+                    'regex:/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/i',
+                    function (string $attribute, mixed $value, Closure $fail) use ($userId) {
+                        $usersWithLabel = get_users([
+                            'meta_key' => 'didgeridoo_user_label',
+                            'meta_value' => $value,
+                            'exclude' => $userId,
+                        ]);
+
+                        if (count($usersWithLabel) > 0) {
+                            $fail(__('The user handle is already taken.', 'didgeridoo'));
+                        }
+                    },
+                ],
+                'didgeridoo_user_did' => [
+                    'max:127',
+                    'regex:/^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/i'
+                ],
+            ],
+            [
+                'didgeridoo_user_label.max' =>          __('The user handle may not be more than 63 characters.', 'didgeridoo'),
+                'didgeridoo_user_label.not_in' =>       __('The user handle is reserved.', 'didgeridoo'),
+                'didgeridoo_user_label.distinct' =>     __('The user handle must be unique.', 'didgeridoo'),
+                'didgeridoo_user_label.regex' =>        __('The user handle may only contain letters, numbers, and dashes, and may not start or end with a dash.', 'didgeridoo'),
+                'didgeridoo_user_did.max' =>            __('The DID may not be more than 127 characters.', 'didgeridoo'),
+                'didgeridoo_user_did.regex' =>          __('The DID is invalid.', 'didgeridoo'),
+            ]
+        );
+
+        return $validator;
     }
 }

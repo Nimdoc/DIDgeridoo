@@ -53,7 +53,7 @@ class SettingsPage
 
     public static function enqueueScripts()
     {
-        $scriptPath = plugin_dir_path(__DIR__) . 'build/script.js';
+        $scriptPath = plugin_dir_url(__DIR__) . 'build/script.js';
         $assetFile = plugin_dir_path(__DIR__) . 'build/script.asset.php';
 
         $asset = require($assetFile);
@@ -76,7 +76,7 @@ class SettingsPage
 
     public static function enqueueStyles()
     {
-        $stylesPath = plugin_dir_path(__DIR__) . 'build/script.css';
+        $stylesPath = plugin_dir_url(__DIR__) . 'build/script.css';
         $assetFile = plugin_dir_path(__DIR__) . 'build/script.asset.php';
 
         $asset = require($assetFile);

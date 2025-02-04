@@ -17,6 +17,8 @@
  */
 
 import { createRoot } from "@wordpress/element";
+import "@wordpress/api-fetch";
+import "@wordpress/i18n";
 
 import "../sass/styles.sass";
 import PopupModal from "./PopupModal";
@@ -74,8 +76,6 @@ const App = () => {
       </div>
     );
   });
-
-  console.log(permalinkStructure);
 
   return (
     <div className="didgeridoo">
