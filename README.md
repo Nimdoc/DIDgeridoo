@@ -88,7 +88,7 @@ npm install
 
 Build for release
 ```bash
-npm build
+npm run build
 ```
 
 Development
