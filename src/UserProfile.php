@@ -18,7 +18,7 @@
  * ******************************************************************************
  */
 
-namespace Didgeridoo;
+namespace DIDgeridoo;
 
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Translation\Translator;
@@ -43,6 +43,10 @@ class UserProfile
 
     public function validateUserProfileFields(\WP_Error $errors, $update, $user)
     {
+        if (!current_user_can('edit_user', $user->ID) || !check_admin_referer('update-user_' . $user->ID)) {
+            return false;
+        }
+
         $translator = new Translator(new \Illuminate\Translation\ArrayLoader(), 'en');
         $container = new Container();
         $validator = (new ValidatorFactory($translator, $container))->make(
@@ -91,7 +95,7 @@ class UserProfile
     public function userProfileFields($user)
     {
         $siteUrl = get_site_url();
-        $urlParts = parse_url($siteUrl);
+        $urlParts = wp_parse_url($siteUrl);
         $siteDomain = $urlParts['host'];
 
         $didgeridooSubdomain = get_option('didgeridoo_subdomain');
@@ -99,11 +103,11 @@ class UserProfile
         $userSubdomain = ($didgeridooSubdomain ? $didgeridooSubdomain . '.' : '') . $siteDomain;
 
 ?>
-        <h3><?= __("ATProto DID Settings", "didgeridoo"); ?></h3>
+        <h3><?php esc_html_e("ATProto DID Settings", "didgeridoo"); ?></h3>
 
         <table class="form-table">
             <tr>
-                <th><label for="didgeridoo_user_label"><?= __("User Handle"); ?></label></th>
+                <th><label for="didgeridoo_user_label"><?php esc_html_e("User Handle", "didgeridoo"); ?></label></th>
                 <td>
                     <input
                         type="text"
@@ -111,13 +115,13 @@ class UserProfile
                         id="didgeridoo_user_label"
                         value="<?php echo esc_attr(get_the_author_meta('didgeridoo_user_label', $user->ID)); ?>"
                         class="regular-text" />
-                    .<?= $userSubdomain ?>
+                    .<?php echo esc_attr($userSubdomain) ?>
                     <br />
-                    <span class="description"><?= __("Please enter user handle", "didgeridoo"); ?></span>
+                    <span class="description"><?php esc_html_e("Please enter user handle", "didgeridoo"); ?></span>
                 </td>
             </tr>
             <tr>
-                <th><label for="didgeridoo_user_did"><?= __("DID"); ?></label></th>
+                <th><label for="didgeridoo_user_did"><?php esc_html_e("DID", "didgeridoo"); ?></label></th>
                 <td>
                     <input
                         type="text"
@@ -126,7 +130,7 @@ class UserProfile
                         value="<?php echo esc_attr(get_the_author_meta('didgeridoo_user_did', $user->ID)); ?>"
                         class="regular-text" />
                     <br />
-                    <span class="description"><?= __("Please enter your DID", "didgeridoo"); ?></span>
+                    <span class="description"><?php esc_html_e("Please enter your DID", "didgeridoo"); ?></span>
                 </td>
             </tr>
             <tr>
@@ -137,15 +141,14 @@ class UserProfile
 
     public function saveUserProfileFields($user_id)
     {
-        if (empty($_POST['_wpnonce']) || ! wp_verify_nonce($_POST['_wpnonce'], 'update-user_' . $user_id)) {
-            return;
-        }
-
-        if (!current_user_can('edit_user', $user_id)) {
+        if (!current_user_can('edit_user', $user_id) || !check_admin_referer('update-user_' . $user_id)) {
             return false;
         }
 
-        update_user_meta($user_id, 'didgeridoo_user_label', $_POST['didgeridoo_user_label']);
-        update_user_meta($user_id, 'didgeridoo_user_did', $_POST['didgeridoo_user_did']);
+        $userLabel = !empty($_POST['didgeridoo_user_label']) ? sanitize_text_field(wp_unslash($_POST['didgeridoo_user_label'])) : '';
+        $userDID = !empty($_POST['didgeridoo_user_did']) ? sanitize_text_field(wp_unslash($_POST['didgeridoo_user_did'])) : '';
+
+        update_user_meta($user_id, 'didgeridoo_user_label', $userLabel);
+        update_user_meta($user_id, 'didgeridoo_user_did', $userDID);
     }
 }

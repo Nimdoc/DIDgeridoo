@@ -20,7 +20,7 @@
 
 /*
 Plugin Name: DIDgeridoo
-Plugin URI: http://example.com/
+Plugin URI: https://github.com/Nimdoc/DIDgeridoo
 Description: Manage ATProto DIDs for your domain.
 Version: 1.0
 Author: Tom Busby
@@ -37,17 +37,17 @@ if (!defined('ABSPATH')) {
 // Include the Composer autoload file
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Didgeridoo\SettingsPage;
-use Didgeridoo\WellKnownRouteResolver;
-use Didgeridoo\UserProfile;
+use DIDgeridoo\SettingsPage;
+use DIDgeridoo\WellKnownRouteResolver;
+use DIDgeridoo\UserProfile;
 
 $settingsPage = new SettingsPage();
 $wellKnownRouteResolver = new WellKnownRouteResolver();
 $userProfile = new UserProfile();
 
-function loadDidgeridooTextdomain()
+function loadDIDgeridooTextdomain()
 {
     $pluginRelativePath = basename(dirname(__FILE__)) . '/languages';
     load_plugin_textdomain('didgeridoo', false, $pluginRelativePath);
 }
-add_action('plugins_loaded', 'loadDidgeridooTextdomain');
+add_action('plugins_loaded', 'loadDIDgeridooTextdomain');

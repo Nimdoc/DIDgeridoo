@@ -18,7 +18,7 @@
  * ******************************************************************************
  */
 
-namespace Didgeridoo;
+namespace DIDgeridoo;
 
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Translation\Translator;
@@ -53,11 +53,16 @@ class SettingsPage
 
     public static function enqueueScripts()
     {
+        $scriptPath = plugin_dir_path(__DIR__) . 'build/script.js';
+        $assetFile = plugin_dir_path(__DIR__) . 'build/script.asset.php';
+
+        $asset = require($assetFile);
+
         wp_enqueue_script(
             'didgeridoo-script',
-            plugin_dir_url(__DIR__) . 'build/script.js',
-            ['wp-element', 'wp-api-fetch'],
-            null,
+            $scriptPath,
+            $asset['dependencies'],
+            $asset['version'],
             true
         );
 
@@ -71,11 +76,17 @@ class SettingsPage
 
     public static function enqueueStyles()
     {
+        $stylesPath = plugin_dir_path(__DIR__) . 'build/script.css';
+        $assetFile = plugin_dir_path(__DIR__) . 'build/script.asset.php';
+
+        $asset = require($assetFile);
+
+
         wp_enqueue_style(
             'didgeridoo-style',
-            plugin_dir_url(__DIR__) . 'build/script.css',
+            $stylesPath,
             [],
-            null
+            $asset['version']
         );
     }
 
@@ -133,7 +144,7 @@ class SettingsPage
         }
 
         $siteUrl = get_site_url();
-        $urlParts = parse_url($siteUrl);
+        $urlParts = wp_parse_url($siteUrl);
         $siteDomain = $urlParts['host'];
 
         //Generate the response
@@ -230,7 +241,7 @@ class SettingsPage
         $didgeridooSubdomain = $validator->validated()['didgeridoo_subdomain'];
 
         $siteUrl = get_site_url();
-        $urlParts = parse_url($siteUrl);
+        $urlParts = wp_parse_url($siteUrl);
         $siteDomain = $urlParts['host'];
 
         $urlToCheck = (is_ssl() ? "https://" : "http://") . 'didgeridoo-test' . ($didgeridooSubdomain ? '.' . $didgeridooSubdomain : '') . '.' . $siteDomain . '/.well-known/atproto-did';

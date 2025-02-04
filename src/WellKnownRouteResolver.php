@@ -18,7 +18,7 @@
  * ******************************************************************************
  */
 
-namespace Didgeridoo;
+namespace DIDgeridoo;
 
 class WellKnownRouteResolver
 {
@@ -57,7 +57,7 @@ class WellKnownRouteResolver
         $didgeridooSubdomain = get_option('didgeridoo_subdomain');
 
         $siteUrl = get_site_url();
-        $urlParts = parse_url($siteUrl);
+        $urlParts = wp_parse_url($siteUrl);
         $siteDomain = $urlParts['host'];
 
         $userSubdomain = ($didgeridooSubdomain ? $didgeridooSubdomain . '.' : '') . $siteDomain;
@@ -94,7 +94,7 @@ class WellKnownRouteResolver
 
         // Output the response as plain text
         header('Content-Type: text/plain');
-        echo $did;
+        echo esc_attr($did);
         echo "\n";
         exit;
     }
