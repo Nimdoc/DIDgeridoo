@@ -26,7 +26,7 @@ Version: 1.0
 Author: Tom Busby
 Author URI: https://nimdok.io
 Text Domain: didgeridoo
-License: EPL-2.0
+License: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
 */
 
 // Prevent direct access to the file
