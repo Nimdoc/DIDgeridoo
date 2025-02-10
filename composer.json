@@ -2,7 +2,7 @@
     "name": "yourname/didgeridoo",
     "description": "A simple starter plugin for WordPress.",
     "type": "wordpress-plugin",
-    "license": "EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0",
+    "license": "EPL-2.0 OR GPL-2.0-only",
     "require": {
         "illuminate/validation": "^11.37",
         "illuminate/translation": "^11.37",
