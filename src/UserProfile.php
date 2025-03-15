@@ -44,7 +44,7 @@ class UserProfile
 
     public function validateUserProfileFields(\WP_Error $errors, $update, $user)
     {
-        if (!current_user_can('edit_user', $user->ID) || !check_admin_referer('update-user_' . $user->ID)) {
+        if (!property_exists($user, 'ID') || !current_user_can('edit_user', $user->ID) || !check_admin_referer('update-user_' . $user->ID)) {
             return false;
         }
 

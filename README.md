@@ -101,3 +101,81 @@ npm run start
 ```bash
 wp i18n make-pot src languages/didgeridoo.pot --domain=didgeridoo
 ```
+
+## Testing Locally
+
+### Setup
+
+You will need to set up a working WordPress instance locally, however you prefer, and then install this plugin. I'm going to use `example.com` as our test domain. You then need to add the following entries to your hosts file, assuming that your local WordPress site is reachable at `127.0.0.1`. If your WordPress site is at a different IP address, then replace `127.0.0.1` with that address.
+
+```
+127.0.0.1	example.com
+127.0.0.1	reallycooluser.example.com
+127.0.0.1	reallycooluser.subdomain.example.com
+127.0.0.1	didgeridoo-test.example.com
+127.0.0.1	didgeridoo-test.subdomain.example.com
+```
+
+Then you will need to set your WordPress Site Address to `example.com`.
+
+After that, navigate to `example.com` and you should arrive at your local WordPress site.
+
+`reallycooluser.example.com` will be the test user handle, and `didgeridoo-test.example.com` is a reserved user handle for testing the DNS in the settings. The reason we hardcode `reallycooluser.example.com` is because wildcards are not supported in the hosts file. You would need dnsmasq or some other software for wildcards, which isn't really necessary for just testing.
+
+### Site DID & Test Subdomain
+
+Navigate to the WordPress backend, go to settings on the sidebar, and click on DIDgeridoo to go to the didgeridoo settings page.
+
+Put the following value into the Main DID field:
+
+```
+did:method:val:two
+```
+
+Then click on the Enable Organization Mode checkbox.
+
+Click on "Test Subdomain", and you should see a green success box appear if you set up your DNS settings from above correctly.
+
+Then open a new tab and navigate to the following URL:
+
+```
+example.com/.well-known/atproto-did
+```
+
+And you should see the DID from above that you saved.
+
+### Test user handle DID
+
+Navigate to the users sections of your WordPress site then add a new user. Then go to that new user's profile and fill in the following fields at the bottom with the corresponding values.
+
+**User Handle**
+```
+reallycooluser
+```
+
+**DID**
+```
+did:method:val:two
+```
+
+Then open a new tab, and navigate to the following URL:
+
+```
+reallycooluser.example.com/.well-known/atproto-did
+```
+
+And again, if your DNS is set up correctly, you should see the DID from above that you just saved in the user profile.
+
+### Test additional subdomain label
+
+Go back to the DIDgeridoo settings, and add the value `subdomain` in the field under Subdomain. Click save, then click on the "Test Subdomain" button. You should again see a green success box appear, as long as your DNS settings are correct.
+
+Then navigate to the following URL
+
+```
+reallycooluser.subdomain.example.com/.well-known/atproto-did
+```
+
+You should again see the DID that was saved for this user. 
+
+NOTE: `reallycooluser.example.com` and `reallycooluser.subdomain.example.com` won't work simultaneously. User handles will only resolve for the current set subdomain.

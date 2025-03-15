@@ -44,10 +44,3 @@ use DIDgeridoo\UserProfile;
 $settingsPage = new SettingsPage();
 $wellKnownRouteResolver = new WellKnownRouteResolver();
 $userProfile = new UserProfile();
-
-function loadDIDgeridooTextdomain()
-{
-    $pluginRelativePath = basename(dirname(__FILE__)) . '/languages';
-    load_plugin_textdomain('didgeridoo', false, $pluginRelativePath);
-}
-add_action('plugins_loaded', 'loadDIDgeridooTextdomain');

@@ -107,7 +107,7 @@ class SettingsPage
             [
                 'methods'  => 'GET',
                 'callback' => [$this, 'settingsPageReadOptionsCallback'],
-                'permission_callback' => '__return_true'
+                'permission_callback' => [$this, 'checkPermissions']
             ]
         );
 
@@ -117,7 +117,7 @@ class SettingsPage
             [
                 'methods'             => 'POST',
                 'callback'            => [$this, 'settingsPageUpdateOptionsCallback'],
-                'permission_callback' => '__return_true'
+                'permission_callback' => [$this, 'checkPermissions']
             ]
         );
 
@@ -127,22 +127,13 @@ class SettingsPage
             [
                 'methods'             => 'POST',
                 'callback'            => [$this, 'settingsPageTestDNSCallback'],
-                'permission_callback' => '__return_true'
+                'permission_callback' => [$this, 'checkPermissions']
             ]
         );
     }
 
     function settingsPageReadOptionsCallback($data)
     {
-        // Check the capability
-        if (!current_user_can('manage_options')) {
-            return new \WP_Error(
-                'rest_read_error',
-                __('Sorry, you are not allowed to update the DIDgeridoo options.', 'didgeridoo'),
-                ['status' => 403]
-            );
-        }
-
         $siteUrl = get_site_url();
         $urlParts = wp_parse_url($siteUrl);
         $siteDomain = $urlParts['host'];
@@ -165,14 +156,6 @@ class SettingsPage
 
     function settingsPageUpdateOptionsCallback($request)
     {
-        if (!current_user_can('manage_options')) {
-            return new \WP_Error(
-                'rest_update_error',
-                __('Sorry, you are not allowed to update the DIDgeridoo options.', 'didgeridoo'),
-                ['status' => 403]
-            );
-        }
-
         $translator = new Translator(new \Illuminate\Translation\ArrayLoader(), 'en');
         $container = new Container();
         $validator = (new ValidatorFactory($translator, $container))->make(
@@ -212,15 +195,6 @@ class SettingsPage
 
     function settingsPageTestDNSCallback($request)
     {
-        // Check the capability
-        if (!current_user_can('manage_options')) {
-            return new \WP_Error(
-                'rest_read_error',
-                __('Sorry, you are not allowed to update the DIDgeridoo options.', 'didgeridoo'),
-                ['status' => 403]
-            );
-        }
-
         $translator = new Translator(new \Illuminate\Translation\ArrayLoader(), 'en');
         $container = new Container();
         $validator = (new ValidatorFactory($translator, $container))->make(
@@ -263,5 +237,10 @@ class SettingsPage
                 __('The URL is not reachable.', 'didgeridoo')
             ]], '400');
         }
+    }
+
+    public function checkPermissions()
+    {
+        return current_user_can('manage_options');
     }
 }

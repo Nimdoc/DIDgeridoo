@@ -1,8 +1,8 @@
 === DIDgeridoo ===
-Contributors: Nimdoc
+Contributors: nimdok
 Tags: atproto, bluesky
-Requires at least: 6.7.1
-Tested up to: 6.7.1
+Requires at least: 6.7
+Tested up to: 6.7
 Stable tag: 1.0
 Requires PHP: 7.4
 License: EPL-2.0 OR GPL-2.0-only
