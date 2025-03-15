@@ -4,6 +4,7 @@
 .gitignore
 .travis.yml
 circle.yml
+node_modules
 ./vendor/nesbot/carbon/bin/carbon.bat
 ./vendor/bin/carbon
 ./vendor/nesbot/carbon/bin/carbon

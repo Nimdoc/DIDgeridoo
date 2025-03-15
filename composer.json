@@ -1,6 +1,6 @@
 {
-    "name": "yourname/didgeridoo",
-    "description": "A simple starter plugin for WordPress.",
+    "name": "nimdoc/didgeridoo",
+    "description": "Manage your ATProto DIDs",
     "type": "wordpress-plugin",
     "license": "EPL-2.0 OR GPL-2.0-only",
     "require": {

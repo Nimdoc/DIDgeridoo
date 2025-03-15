@@ -22,7 +22,7 @@
 Plugin Name: DIDgeridoo
 Plugin URI: https://github.com/Nimdoc/DIDgeridoo
 Description: Manage ATProto DIDs for your domain.
-Version: 1.0
+Version: 1.0.1
 Author: Tom Busby
 Author URI: https://nimdok.io
 Text Domain: didgeridoo
